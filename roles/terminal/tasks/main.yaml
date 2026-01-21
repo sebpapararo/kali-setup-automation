@@ -1,0 +1,28 @@
+---
+- name: Install better terminal tools
+  become: true
+  ansible.builtin.apt:
+    state: present
+    update_cache: true
+    pkg:
+      - bat
+      - fd-find
+      - ripgrep
+      - fzf
+
+- name: Add useful aliases to ~/.zshrc & source fzf
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - terminal aliases"
+    append_newline: true
+    prepend_newline: true
+    block: |
+      alias lla='ls -la'
+      alias llh='ls -lh'
+      alias cat='batcat'
+      alias catp='batcat --style plain'
+      alias grep='rg'
+      alias nano='nano -l -m'
+      alias find='fdfind'
+      alias fd='fdfind'
+      source <(fzf --zsh)

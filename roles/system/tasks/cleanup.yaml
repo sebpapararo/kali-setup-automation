@@ -1,0 +1,11 @@
+---
+- name: Remove pointless directories from user's home
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/{{ item }}"
+    state: absent
+  loop:
+    - Music
+    - Pictures
+    - Public
+    - Templates
+    - Videos

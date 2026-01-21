@@ -1,0 +1,66 @@
+---
+- name: Install the Rust toolchain
+  block:
+    - name: Check if rustup is already installed
+      ansible.builtin.stat:
+        path: "{{ ansible_facts['env']['HOME'] }}/.cargo/bin/rustup"
+      register: tools_rustup_installed
+
+    - name: Download rustup installer
+      ansible.builtin.get_url:
+        url: https://sh.rustup.rs
+        dest: /tmp/rustup-init.sh
+        mode: '0755'
+      when: not tools_rustup_installed.stat.exists
+
+    - name: Run rustup installer
+      ansible.builtin.command: /tmp/rustup-init.sh -y
+      when: not tools_rustup_installed.stat.exists
+      changed_when: true
+
+    - name: Clean up installer
+      ansible.builtin.file:
+        path: /tmp/rustup-init.sh
+        state: absent
+
+    - name: Source cargo environment in zshrc (if exists)
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
+        line: '. "$HOME/.cargo/env"'
+        regexp: '^\. "\$HOME/\.cargo/env"'
+        state: present
+
+    - name: Install starship and zellij via Cargo (will take some time)
+      community.general.cargo:
+        name:
+          - starship
+          - zellij
+        locked: true
+        state: present
+        executable: "{{ ansible_facts['env']['HOME'] }}/.cargo/bin/cargo"
+      when: not tools_rustup_installed.stat.exists
+
+    - name: Configure ~/.zshrc to use starhip & zellij
+      ansible.builtin.blockinfile:
+        path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - starship & zellij"
+        append_newline: true
+        prepend_newline: true
+        block: |
+          if [[ "$TERM_PROGRAM" != "vscode" ]]; then
+            eval "$(zellij setup --generate-auto-start zsh)"
+          fi
+          eval "$(starship init zsh)"
+      when: not tools_rustup_installed.stat.exists
+
+    - name: Ensure the zellij config directory exists
+      ansible.builtin.file:
+        path: "{{ ansible_facts['env']['HOME'] }}/.config/zellij"
+        state: directory
+        mode: '0775'
+
+    - name: Copy the customised Zellij config
+      ansible.builtin.copy:
+        src: zellij_config.kdl
+        dest: "{{ ansible_facts['env']['HOME'] }}/.config/zellij/config.kdl"
+        mode: '0664'

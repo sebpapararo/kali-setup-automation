@@ -1,0 +1,25 @@
+name: Lint
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ansible-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+
+      - name: Install ansible
+        run: pipx install ansible
+
+      - name: Install ansible-lint
+        run: pipx inject --include-apps ansible ansible-lint
+
+      - name: Run ansible-lint
+        run: ansible-lint

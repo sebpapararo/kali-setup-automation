@@ -1,0 +1,45 @@
+---
+- name: Install NVM and Node.js LTS
+  block:
+    - name: Check if nvm is already installed
+      ansible.builtin.stat:
+        path: "{{ ansible_facts['env']['HOME'] }}/.config/nvm/nvm.sh"
+      register: tools_nvm_installed
+
+    - name: Get latest nvm version
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/nvm-sh/nvm/releases/latest
+        return_content: true
+      register: tools_nvm_version_response
+      when: not tools_nvm_installed.stat.exists
+
+    - name: Set nvm version fact
+      ansible.builtin.set_fact:
+        tools_nvm_version: "{{ (tools_nvm_version_response.content | from_json).tag_name }}"
+      when: not tools_nvm_installed.stat.exists
+
+    - name: Download nvm installer
+      ansible.builtin.get_url:
+        url: "https://raw.githubusercontent.com/nvm-sh/nvm/{{ tools_nvm_version }}/install.sh"
+        dest: /tmp/nvm-init.sh
+        mode: '0755'
+      when: not tools_nvm_installed.stat.exists
+
+    - name: Run nvm installer
+      ansible.builtin.command: /tmp/nvm-init.sh
+      when: not tools_nvm_installed.stat.exists
+      changed_when: true
+
+    - name: Install Node.js LTS via nvm
+      ansible.builtin.shell: |
+        source {{ ansible_facts['env']['HOME'] }}/.config/nvm/nvm.sh
+        nvm install --lts
+      args:
+        executable: /bin/bash
+      when: not tools_nvm_installed.stat.exists
+      changed_when: true
+
+    - name: Clean up nvm installer
+      ansible.builtin.file:
+        path: /tmp/nvm-init.sh
+        state: absent

@@ -1,0 +1,31 @@
+---
+- name: Install Google Chrome
+  become: true
+  block:
+    - name: Add Google Chrome signing key
+      ansible.builtin.get_url:
+        url: https://dl.google.com/linux/linux_signing_key.pub
+        dest: /etc/apt/keyrings/google-chrome.asc
+        mode: '0644'
+
+    - name: Add Google Chrome APT repository
+      ansible.builtin.deb822_repository:
+        name: google-chrome
+        types: deb
+        uris: https://dl.google.com/linux/chrome/deb/
+        suites: stable
+        components: main
+        architectures: amd64
+        signed_by: /etc/apt/keyrings/google-chrome.asc
+        state: present
+
+    - name: Install Google Chrome
+      ansible.builtin.apt:
+        name: google-chrome-stable
+        state: present
+        update_cache: true
+
+    - name: Remove duplicate Chrome APT source added by installer
+      ansible.builtin.file:
+        path: /etc/apt/sources.list.d/google-chrome.list
+        state: absent

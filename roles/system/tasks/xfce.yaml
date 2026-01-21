@@ -1,0 +1,35 @@
+---
+- name: Disable display power management (DPMS)
+  community.general.xfconf:
+    channel: xfce4-power-manager
+    property: /xfce4-power-manager/dpms-enabled
+    value_type: bool
+    value: false
+
+- name: Disable system sleep on AC power
+  community.general.xfconf:
+    channel: xfce4-power-manager
+    property: /xfce4-power-manager/inactivity-on-ac
+    value_type: int
+    value: 0
+
+- name: Disable system sleep on battery power
+  community.general.xfconf:
+    channel: xfce4-power-manager
+    property: /xfce4-power-manager/inactivity-on-battery
+    value_type: int
+    value: 0
+
+- name: Disable screen lock
+  community.general.xfconf:
+    channel: xfce4-screensaver
+    property: /lock/enabled
+    value_type: bool
+    value: false
+
+- name: Disable screensaver
+  community.general.xfconf:
+    channel: xfce4-screensaver
+    property: /saver/enabled
+    value_type: bool
+    value: false

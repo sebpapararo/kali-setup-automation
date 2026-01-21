@@ -1,0 +1,12 @@
+---
+- name: Enable autologin
+  become: true
+  ansible.builtin.blockinfile:
+    path: /etc/lightdm/lightdm.conf
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - autologin"
+    append_newline: true
+    prepend_newline: true
+    block: |
+      [SeatDefaults]
+      autologin-user=kali
+      autologin-user-timeout=0

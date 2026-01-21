@@ -1,0 +1,6 @@
+---
+profile: production
+
+skip_list:
+  - package-latest  # Intentional for system upgrades
+  - no-handler      # Handlers not needed for one-time setup tasks

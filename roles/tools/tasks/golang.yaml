@@ -1,0 +1,46 @@
+---
+- name: Install Golang
+  become: true
+  block:
+    - name: Check if Go is already installed
+      ansible.builtin.stat:
+        path: /usr/local/go/bin/go
+      register: tools_go_installed
+
+    - name: Get latest Go version
+      ansible.builtin.uri:
+        url: https://go.dev/dl/?mode=json
+        return_content: true
+      register: tools_go_version_response
+      when: not tools_go_installed.stat.exists
+
+    - name: Set Go version fact
+      ansible.builtin.set_fact:
+        tools_go_version: "{{ (tools_go_version_response.content | from_json)[0].version }}"
+      when: not tools_go_installed.stat.exists
+
+    - name: Download Go tarball
+      ansible.builtin.get_url:
+        url: "https://go.dev/dl/{{ tools_go_version }}.linux-amd64.tar.gz"
+        dest: /tmp/go.tar.gz
+        mode: '0644'
+      when: not tools_go_installed.stat.exists
+
+    - name: Extract Go to /usr/local
+      ansible.builtin.unarchive:
+        src: /tmp/go.tar.gz
+        dest: /usr/local
+        remote_src: true
+      when: not tools_go_installed.stat.exists
+
+    - name: Clean up Go tarball
+      ansible.builtin.file:
+        path: /tmp/go.tar.gz
+        state: absent
+
+    - name: Add Go to PATH in zshrc
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
+        line: 'export PATH=$PATH:/usr/local/go/bin'
+        regexp: '^export PATH=.*:/usr/local/go/bin'
+        state: present
