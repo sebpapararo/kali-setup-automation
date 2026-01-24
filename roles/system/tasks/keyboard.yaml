@@ -1,0 +1,36 @@
+---
+- name: Set keyboard layout to UK
+  become: true
+  ansible.builtin.debconf:
+    name: keyboard-configuration
+    question: keyboard-configuration/layoutcode
+    value: gb
+    vtype: string
+
+- name: Set keyboard model
+  become: true
+  ansible.builtin.debconf:
+    name: keyboard-configuration
+    question: keyboard-configuration/modelcode
+    value: pc105
+    vtype: string
+
+- name: Configure keyboard defaults
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/default/keyboard
+    content: |
+      XKBMODEL="pc105"
+      XKBLAYOUT="gb"
+      XKBVARIANT=""
+      XKBOPTIONS=""
+      BACKSPACE="guess"
+    mode: '0644'
+  register: system_keyboard_config
+
+- name: Apply keyboard configuration
+  become: true
+  ansible.builtin.command:
+    cmd: dpkg-reconfigure -f noninteractive keyboard-configuration
+  when: system_keyboard_config.changed
+  changed_when: true

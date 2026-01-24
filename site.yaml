@@ -1,0 +1,13 @@
+---
+- name: Run the Kali Setup Automation playbook
+  hosts: all
+  roles:
+    - { role: system, tags: system }
+    - { role: ssh, tags: ssh }
+    - { role: tools, tags: tools }
+    - { role: terminal, tags: terminal }
+    - { role: desktop, tags: desktop }
+  post_tasks:
+    - name: Display completion message
+      ansible.builtin.debug:
+        msg: "Setup & customisation completed successfully, please reboot for all the changes to take effect."

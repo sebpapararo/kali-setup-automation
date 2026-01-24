@@ -1,0 +1,72 @@
+---
+- name: Download Trivy GPG key
+  become: true
+  ansible.builtin.get_url:
+    url: https://aquasecurity.github.io/trivy-repo/deb/public.key
+    dest: /tmp/trivy.asc
+    mode: "0644"
+
+- name: Dearmor Trivy GPG key
+  become: true
+  ansible.builtin.shell:
+    cmd: gpg --dearmor < /tmp/trivy.asc > /usr/share/keyrings/trivy.gpg
+    creates: /usr/share/keyrings/trivy.gpg
+
+- name: Add Trivy APT repository
+  become: true
+  ansible.builtin.deb822_repository:
+    name: trivy
+    types: deb
+    uris: https://aquasecurity.github.io/trivy-repo/deb
+    suites: generic
+    components: main
+    signed_by: /usr/share/keyrings/trivy.gpg
+    state: present
+
+- name: Download Bruno GPG key
+  become: true
+  ansible.builtin.get_url:
+    url: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x9FA6017ECABE0266"
+    dest: /tmp/bruno.asc
+    mode: "0644"
+
+- name: Dearmor Bruno GPG key
+  become: true
+  ansible.builtin.shell:
+    cmd: gpg --dearmor < /tmp/bruno.asc > /etc/apt/keyrings/bruno.gpg
+    creates: /etc/apt/keyrings/bruno.gpg
+
+- name: Set Bruno GPG key permissions
+  become: true
+  ansible.builtin.file:
+    path: /etc/apt/keyrings/bruno.gpg
+    mode: "0644"
+
+- name: Add Bruno APT repository
+  become: true
+  ansible.builtin.deb822_repository:
+    name: bruno
+    types: deb
+    architectures: amd64
+    uris: http://debian.usebruno.com/
+    suites: bruno
+    components: stable
+    signed_by: /etc/apt/keyrings/bruno.gpg
+    state: present
+
+- name: Install tools via APT
+  become: true
+  ansible.builtin.apt:
+    state: present
+    update_cache: true
+    pkg:
+      - bruno
+      - checksec
+      - clangd
+      - flameshot
+      - gdb
+      - ghidra
+      - gitleaks
+      - lldb
+      - openjdk-21-jdk
+      - trivy

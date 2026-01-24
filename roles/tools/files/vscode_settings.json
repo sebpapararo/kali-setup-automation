@@ -1,0 +1,13 @@
+{
+    "workbench.colorTheme": "Bearded Theme Solarized",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.startupEditor": "none",
+    "telemetry.feedback.enabled": false,
+    "telemetry.telemetryLevel": "off",
+    "git.autofetch": true,
+    "chat.agent.enabled": false,
+    "chat.disableAIFeatures": true,
+    "workbench.editor.empty.hint": "hidden",
+    "explorer.confirmDelete": false,
+    "terminal.integrated.initialHint": false,
+}

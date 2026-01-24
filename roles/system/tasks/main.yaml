@@ -1,0 +1,28 @@
+---
+- name: APT configuration and upgrade
+  ansible.builtin.import_tasks: apt.yaml
+  tags: upgrade
+
+- name: Locale settings
+  ansible.builtin.import_tasks: locale.yaml
+  tags: locale
+
+- name: Keyboard configuration
+  ansible.builtin.import_tasks: keyboard.yaml
+  tags: keyboard
+
+- name: Timezone configuration
+  ansible.builtin.import_tasks: timezone.yaml
+  tags: timezone
+
+- name: Autologin configuration
+  ansible.builtin.import_tasks: autologin.yaml
+  tags: autologin
+
+- name: XFCE power and screensaver settings
+  ansible.builtin.import_tasks: xfce.yaml
+  tags: xfce
+
+- name: Home directory cleanup
+  ansible.builtin.import_tasks: cleanup.yaml
+  tags: cleanup

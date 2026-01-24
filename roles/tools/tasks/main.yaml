@@ -1,0 +1,32 @@
+---
+- name: Install APT packages
+  ansible.builtin.import_tasks: apt.yaml
+  tags: apt
+
+- name: Install Rust toolchain
+  ansible.builtin.import_tasks: rust.yaml
+  tags: rust
+
+- name: Install Golang
+  ansible.builtin.import_tasks: golang.yaml
+  tags: golang
+
+- name: Install Google Chrome
+  ansible.builtin.import_tasks: chrome.yaml
+  tags: chrome
+
+- name: Install Visual Studio Code
+  ansible.builtin.import_tasks: vscode.yaml
+  tags: vscode
+
+- name: Install Docker
+  ansible.builtin.import_tasks: docker.yaml
+  tags: docker
+
+- name: Install Python tools
+  ansible.builtin.import_tasks: python.yaml
+  tags: python
+
+- name: Install Node.js
+  ansible.builtin.import_tasks: node.yaml
+  tags: node

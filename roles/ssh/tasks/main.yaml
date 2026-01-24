@@ -1,0 +1,12 @@
+---
+- name: Create the user's SSH directory if it does not already exist
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/.ssh"
+    state: directory
+    mode: '0700'
+
+- name: Generate a ed25519 SSH keypair
+  community.crypto.openssh_keypair:
+    path: "{{ ansible_facts['env']['HOME'] }}/.ssh/id_ed25519"
+    type: ed25519
+    comment: "{{ ansible_facts['env']['USER'] }}@{{ ansible_facts['hostname'] }}"
