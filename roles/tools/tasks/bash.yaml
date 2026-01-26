@@ -1,0 +1,24 @@
+---
+- name: Install Opengrep
+  block:
+    - name: Check if Opengrep is already installed
+      ansible.builtin.stat:
+        path: "{{ ansible_facts['env']['HOME'] }}/.local/bin/opengrep"
+      register: tools_opengrep_installed
+
+    - name: Download Opengrep installer
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh
+        dest: /tmp/opengrep-init.sh
+        mode: '0755'
+      when: not tools_opengrep_installed.stat.exists
+
+    - name: Run Opengrep installer
+      ansible.builtin.command: /tmp/opengrep-init.sh
+      when: not tools_opengrep_installed.stat.exists
+      changed_when: true
+
+    - name: Clean up Opengrep installer
+      ansible.builtin.file:
+        path: /tmp/opengrep-init.sh
+        state: absent

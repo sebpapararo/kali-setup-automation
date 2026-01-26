@@ -30,3 +30,7 @@
 - name: Install Node.js
   ansible.builtin.import_tasks: node.yaml
   tags: node
+
+- name: Install tools via bash
+  ansible.builtin.import_tasks: bash.yaml
+  tags: bash

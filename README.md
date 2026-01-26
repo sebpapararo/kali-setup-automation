@@ -62,6 +62,7 @@ Use these to install specific tools without running the full `tools` role:
 | `docker` | Docker CE, compose plugin, buildx plugin |
 | `python` | Python tools (pwntools, netexec, bandit, uv, pyenv) |
 | `node` | Node.js LTS via NVM |
+| `bash` | Install tools via bash |
 
 ### Examples
 
