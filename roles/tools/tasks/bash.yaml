@@ -22,3 +22,34 @@
       ansible.builtin.file:
         path: /tmp/opengrep-init.sh
         state: absent
+
+- name: Install pwndbg for GDB & LLDB
+  block:
+    - name: Check if pwndbg is already installed
+      ansible.builtin.stat:
+        path: "/usr/local/bin/pwndbg"
+      register: tools_pwndbg_installed
+
+    - name: Download pwndbg installer
+      ansible.builtin.get_url:
+        url: https://install.pwndbg.re
+        dest: /tmp/pwndbg-init.sh
+        mode: '0755'
+      when: not tools_pwndbg_installed.stat.exists
+
+    - name: Run pwndbg-gdb installer
+      ansible.builtin.command: /tmp/pwndbg-init.sh -t pwndbg-gdb
+      when: not tools_pwndbg_installed.stat.exists
+      changed_when: true
+      become: true
+
+    - name: Run pwndbg-lldb installer
+      ansible.builtin.command: /tmp/pwndbg-init.sh -t pwndbg-lldb
+      when: not tools_pwndbg_installed.stat.exists
+      changed_when: true
+      become: true
+
+    - name: Clean up pwndbg installer
+      ansible.builtin.file:
+        path: /tmp/pwndbg-init.sh
+        state: absent
