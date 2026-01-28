@@ -59,6 +59,14 @@
         state: directory
         mode: '0775'
 
+    - name: Install xsel to get a working clipboard inside zellij
+      become: true
+      ansible.builtin.apt:
+        state: present
+        update_cache: true
+        pkg:
+          - xsel
+
     - name: Copy the customised Zellij config
       ansible.builtin.copy:
         src: zellij_config.kdl
