@@ -53,3 +53,9 @@
       ansible.builtin.file:
         path: /tmp/pwndbg-init.sh
         state: absent
+
+    - name: Copy the gdbinit file
+      ansible.builtin.copy:
+        src: gdbinit
+        dest: "{{ ansible_facts['env']['HOME'] }}/.gdbinit"
+        mode: '0664'
