@@ -1,0 +1,16 @@
+set disassembly-flavor intel
+set show-tips off
+
+# Display a clear separator between contexts
+python
+import shutil
+def separator():
+    width = shutil.get_terminal_size().columns
+    text = "[ NEW CONTEXT ]"
+    padding = (width - len(text)) // 2
+    gdb.write("\033[1;32m" + "═" * padding + text + "═" * (width - padding - len(text)) + "\033[0m")
+end
+
+define hook-stop
+python separator()
+end
