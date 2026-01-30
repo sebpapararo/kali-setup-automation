@@ -34,3 +34,7 @@
 - name: Install tools via bash
   ansible.builtin.import_tasks: bash.yaml
   tags: bash
+
+- name: Install Binary Ninja Free
+  ansible.builtin.import_tasks: binaryninja.yaml
+  tags: binaryninja

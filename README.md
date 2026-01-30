@@ -83,8 +83,7 @@ ansible-playbook site.yaml -t terminal,desktop
 - [ ] Firefox extensions
 - [ ] Binary Ninja installation and configuration
 - [ ] Ghidra configuration
-- [ ] Taskbar icons
-- [ ] Configurable keyboard layout and language
 - [ ] Offline tag (offline-only tasks)
 - [ ] Run against remote machine
 - [ ] Ability to change username
+- [ ] Ability to change password

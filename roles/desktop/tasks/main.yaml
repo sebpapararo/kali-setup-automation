@@ -14,3 +14,49 @@
     property: /backdrop/screen0/monitorVirtual-1/workspace0/last-image
     value_type: string
     value: /usr/share/backgrounds/kali/kali-metal-dark-16x9.png
+
+- name: Get current panel plugin IDs
+  ansible.builtin.command:
+    cmd: xfconf-query -c xfce4-panel -p /panels/panel-1/plugin-ids
+  register: desktop_panel_plugin_ids_raw
+  changed_when: false
+
+- name: Parse panel plugin IDs
+  ansible.builtin.set_fact:
+    desktop_panel_plugin_ids: "{{ desktop_panel_plugin_ids_raw.stdout_lines[2:] | map('int') | list }}"
+
+- name: Calculate plugin IDs to remove
+  ansible.builtin.set_fact:
+    desktop_plugins_to_remove: "{{ desktop_panel_plugin_ids[2:5] + desktop_panel_plugin_ids[7:9] }}"
+
+- name: Remove unnecessary items from taskbar
+  community.general.xfconf:
+    channel: xfce4-panel
+    property: /panels/panel-1/plugin-ids
+    value_type: int
+    value: "{{ desktop_panel_plugin_ids[:2] + desktop_panel_plugin_ids[5:7] + desktop_panel_plugin_ids[9:] }}"
+    force_array: true
+
+- name: Remove plugin configurations from xfconf
+  ansible.builtin.command:
+    cmd: xfconf-query -c xfce4-panel -p /plugins/plugin-{{ item }} -r -R
+  loop: "{{ desktop_plugins_to_remove }}"
+  failed_when: false
+  changed_when: true
+
+- name: Remove launcher directories
+  ansible.builtin.file:
+    path: ~/.config/xfce4/panel/launcher-{{ item }}
+    state: absent
+  loop: "{{ desktop_plugins_to_remove }}"
+
+- name: Add launchers to XFCE taskbar
+  ansible.builtin.include_tasks: add_taskbar_launcher.yaml
+  loop:
+    - { position: 3, desktop_file: "/usr/share/applications/google-chrome.desktop"}
+    - { position: 4, desktop_file: "/usr/share/applications/kali-ghidra.desktop"}
+    - { position: 5, desktop_file: "/usr/share/applications/binaryninja.desktop"}
+    - { position: 6, desktop_file: "/usr/share/applications/org.wireshark.Wireshark.desktop"}
+    - { position: 7, desktop_file: "/usr/share/applications/bruno.desktop"}
+    - { position: 8, desktop_file: "/usr/share/applications/kali-burpsuite.desktop"}
+    - { position: 9, desktop_file: "/usr/share/applications/code.desktop"}
