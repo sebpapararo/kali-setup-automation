@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.4.1] - 30-01-2026
+
+### Changed
+
+- Restructure the locale, timezone, and keyboard functionality into a single `regional` task file
+- Housekeeping on README.md
+
 ## [1.4.0] - 30-01-2026
 
 ### Added

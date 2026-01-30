@@ -1,4 +1,28 @@
 ---
+- name: Set default locale to en_GB.UTF-8
+  become: true
+  ansible.builtin.debconf:
+    name: locales
+    question: locales/default_environment_locale
+    value: en_GB.UTF-8
+    vtype: select
+
+- name: Enable and generate en_GB.UTF-8 locale
+  become: true
+  community.general.locale_gen:
+    name: en_GB.UTF-8
+    state: present
+
+- name: Set system locale
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/default/locale
+    content: |
+      LANG=en_GB.UTF-8
+      LANGUAGE=en_GB:en
+      LC_ALL=en_GB.UTF-8
+    mode: '0644'
+
 - name: Set keyboard layout to UK
   become: true
   ansible.builtin.debconf:
@@ -34,3 +58,8 @@
     cmd: dpkg-reconfigure -f noninteractive keyboard-configuration
   when: system_keyboard_config.changed
   changed_when: true
+
+- name: Set timezone to Europe/London
+  become: true
+  community.general.timezone:
+    name: Europe/London
