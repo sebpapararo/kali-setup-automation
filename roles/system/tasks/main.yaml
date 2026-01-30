@@ -26,3 +26,7 @@
 - name: Home directory cleanup
   ansible.builtin.import_tasks: cleanup.yaml
   tags: cleanup
+
+- name: Enable shared folders
+  ansible.builtin.import_tasks: shared_folder.yaml
+  tags: shared_folder

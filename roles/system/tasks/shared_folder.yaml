@@ -1,0 +1,9 @@
+---
+- name: Fix vmware shared folders
+  become: true
+  ansible.builtin.blockinfile:
+    path: /etc/fstab
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - vmware sharefolder fix"
+    append_newline: true
+    prepend_newline: true
+    block: vmhgfs-fuse /mnt/hgfs  fuse defaults,allow_other,nofail   0   0

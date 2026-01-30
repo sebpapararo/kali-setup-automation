@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.4.0] - 30-01-2026
+
+### Added
+
+- Added support for adding xfce4 taskbar launcher icons
+- Added support for shared folders in VMware
+- Added install for Binary Ninja
+
 ## [1.3.1] - 28-01-2026
 
 ### Fixed
