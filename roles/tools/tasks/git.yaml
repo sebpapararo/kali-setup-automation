@@ -30,17 +30,3 @@
         name: core.editor
         scope: global
         value: nano
-
-- name: Install XSStrike
-  block:
-    - name: Clone XSStrike repository
-      ansible.builtin.git:
-        repo: 'https://github.com/s0md3v/XSStrike.git'
-        dest: "{{ ansible_facts['env']['HOME'] }}/XSStrike"
-        depth: 1
-        version: master
-
-    - name: Install XSStrike pip requirements
-      ansible.builtin.pip:
-        requirements: "{{ ansible_facts['env']['HOME'] }}/XSStrike/requirements.txt"
-        break_system_packages: true

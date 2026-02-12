@@ -11,7 +11,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added apt packages: jq, name-that-hash, seclists
 - Added rockyou.txt extraction from seclists
 - Added install for Penelope via pipx
-- Added install for XSStrike via pip
+- Added install for tokei via cargo
+- Added sensible git configurations
 
 ### Changed
 
