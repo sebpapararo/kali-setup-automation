@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=BinaryNinja
-Comment=Binary Ninja is an interactive decompiler, disassembler, debugger, and binary analysis platform built by reverse engineers, for reverse engineers
+Comment=An interactive decompiler, disassembler, debugger, and binary analysis platform
 Exec=/home/kali/.binaryninja/binaryninja/binaryninja
 Icon=/home/kali/.binaryninja/binaryninja/logo.png
 StartupNotify=false

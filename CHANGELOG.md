@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.5.0]
+
+### Added
+
+- Added apt packages: jq, name-that-hash, seclists
+- Added rockyou.txt extraction from seclists
+- Added install for Penelope via pipx
+- Added install for XSStrike via pip
+
+### Changed
+
+- Shortened Binary Ninja desktop entry comment
+- Consolidated netexec install into the shared pipx loop
+- Updated README to reflect Binary Ninja installation is done (configuration remains)
+
 ## [1.4.1] - 30-01-2026
 
 ### Changed

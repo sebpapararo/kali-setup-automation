@@ -80,7 +80,7 @@ ansible-playbook site.yaml -t terminal,desktop
 
 - [ ] Chrome extensions
 - [ ] Firefox extensions
-- [ ] Binary Ninja installation and configuration
+- [ ] Binary Ninja configuration
 - [ ] Ghidra configuration
 - [ ] Offline tag (offline-only tasks)
 - [ ] Run against remote machine

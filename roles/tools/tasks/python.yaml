@@ -5,18 +5,14 @@
     state: present
     break_system_packages: true
 
-- name: Install netexec via pipx
-  community.general.pipx:
-    name: netexec
-    state: present
-    source: git+https://github.com/Pennyw0rth/NetExec
-
 - name: Install tools via pipx
   community.general.pipx:
     state: present
     name: "{{ item }}"
   loop:
     - bandit
+    - git+https://github.com/brightio/penelope
+    - git+https://github.com/Pennyw0rth/NetExec
 
 - name: Install uv
   block:
@@ -77,3 +73,9 @@
       ansible.builtin.file:
         path: /tmp/pyenv-init.sh
         state: absent
+
+- name: Install XSStrike globally via pip
+  ansible.builtin.pip:
+    name: git+https://github.com/s0md3v/XSStrike
+    state: present
+    break_system_packages: true

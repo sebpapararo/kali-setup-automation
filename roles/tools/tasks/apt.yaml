@@ -67,6 +67,16 @@
       - gdb
       - ghidra
       - gitleaks
+      - jq
       - lldb
+      - name-that-hash
       - openjdk-21-jdk
+      - seclists
       - trivy
+
+- name: Extract rockyou.txt
+  become: true
+  ansible.builtin.unarchive:
+    src: /usr/share/seclists/Passwords/Leaked-Databases/rockyou.txt.tar.gz
+    dest: /usr/share/seclists/Passwords/Leaked-Databases
+    remote_src: true
