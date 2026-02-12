@@ -73,9 +73,3 @@
       ansible.builtin.file:
         path: /tmp/pyenv-init.sh
         state: absent
-
-- name: Install XSStrike globally via pip
-  ansible.builtin.pip:
-    name: git+https://github.com/s0md3v/XSStrike
-    state: present
-    break_system_packages: true

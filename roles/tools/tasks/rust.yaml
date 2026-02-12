@@ -30,11 +30,12 @@
         regexp: '^\. "\$HOME/\.cargo/env"'
         state: present
 
-    - name: Install starship and zellij via Cargo (will take some time)
+    - name: Install some crates via Cargo (will take some time)
       community.general.cargo:
         name:
           - starship
           - zellij
+          - tokei
         locked: true
         state: present
         executable: "{{ ansible_facts['env']['HOME'] }}/.cargo/bin/cargo"

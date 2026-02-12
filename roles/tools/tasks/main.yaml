@@ -38,3 +38,7 @@
 - name: Install Binary Ninja Free
   ansible.builtin.import_tasks: binaryninja.yaml
   tags: binaryninja
+
+- name: Configure Git and install tools
+  ansible.builtin.import_tasks: git.yaml
+  tags: git
