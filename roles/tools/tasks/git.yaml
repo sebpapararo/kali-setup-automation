@@ -1,0 +1,32 @@
+---
+- name: Configure Git defaults
+  block:
+    - name: Set default branch to main
+      community.general.git_config:
+        name: init.defaultBranch
+        scope: global
+        value: main
+
+    - name: Auto setup remote tracking branch on push
+      community.general.git_config:
+        name: push.autoSetupRemote
+        scope: global
+        value: "true"
+
+    - name: Set default push behaviour to current branch
+      community.general.git_config:
+        name: push.default
+        scope: global
+        value: current
+
+    - name: Enable pull with rebase by default
+      community.general.git_config:
+        name: pull.rebase
+        scope: global
+        value: "true"
+
+    - name: Set default editor to vim
+      community.general.git_config:
+        name: core.editor
+        scope: global
+        value: nano
