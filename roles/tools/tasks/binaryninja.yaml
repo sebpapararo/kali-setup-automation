@@ -45,7 +45,7 @@
 
     - name: Copy the binaryninja desktop file
       become: true
-      ansible.builtin.copy:
+      ansible.builtin.template:
         src: binaryninja.desktop
         dest: "/usr/share/applications/binaryninja.desktop"
         mode: '0664'
