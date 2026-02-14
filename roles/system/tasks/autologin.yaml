@@ -8,5 +8,5 @@
     prepend_newline: true
     block: |
       [SeatDefaults]
-      autologin-user=kali
+      autologin-user={{ ansible_facts['env']['USER'] }}
       autologin-user-timeout=0
