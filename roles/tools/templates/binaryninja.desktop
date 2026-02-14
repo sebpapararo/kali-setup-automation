@@ -1,8 +1,8 @@
 [Desktop Entry]
 Name=BinaryNinja
 Comment=An interactive decompiler, disassembler, debugger, and binary analysis platform
-Exec=/home/kali/.binaryninja/binaryninja/binaryninja
-Icon=/home/kali/.binaryninja/binaryninja/logo.png
+Exec={{ ansible_facts['env']['HOME'] }}/.binaryninja/binaryninja/binaryninja
+Icon={{ ansible_facts['env']['HOME'] }}/.binaryninja/binaryninja/logo.png
 StartupNotify=false
 Terminal=false
 Type=Application

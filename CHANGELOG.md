@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [1.5.0]
+## [1.5.1] - 14-02-2026
+
+### Fixed
+
+- Fix autologin and binaryninja taskbar icon for non-default usernames
+
+## [1.5.0] - 12-02-2026
 
 ### Added
 

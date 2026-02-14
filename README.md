@@ -40,7 +40,7 @@ Use these to run specific system configuration tasks:
 
 | Tag | Description |
 |-----|-------------|
-| `autologin` | Enable autologin for kali user |
+| `autologin` | Enable autologin for current user |
 | `cleanup` | Remove unused home directories (Music, Pictures, etc.) |
 | `regional` | Regional settings (locale, keyboard, timezone) |
 | `upgrade` | APT sources modernization and full package upgrade |
