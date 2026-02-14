@@ -61,7 +61,6 @@
     update_cache: true
     pkg:
       - bruno
-      - checksec
       - clangd
       - flameshot
       - gdb
@@ -80,3 +79,6 @@
     src: /usr/share/seclists/Passwords/Leaked-Databases/rockyou.txt.tar.gz
     dest: /usr/share/seclists/Passwords/Leaked-Databases
     remote_src: true
+    owner: root
+    group: root
+    mode: '0644'

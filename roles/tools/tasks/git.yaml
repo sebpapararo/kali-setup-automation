@@ -30,3 +30,19 @@
         name: core.editor
         scope: global
         value: nano
+
+- name: Get latest checksec version from GitHub
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/slimm609/checksec/releases/latest
+    return_content: true
+  register: tools_git_checksec_versions
+  changed_when: false
+
+- name: Extract the version into a variable
+  ansible.builtin.set_fact:
+    tools_checksec_version: "{{ tools_git_checksec_versions.json.tag_name }}"
+
+- name: Install checksec .deb package
+  become: true
+  ansible.builtin.apt:
+    deb: "https://github.com/slimm609/checksec/releases/download/{{ tools_checksec_version }}/checksec_{{ tools_checksec_version }}_amd64.deb"
