@@ -71,6 +71,7 @@
       - name-that-hash
       - openjdk-21-jdk
       - seclists
+      - strace
       - trivy
 
 - name: Extract rockyou.txt

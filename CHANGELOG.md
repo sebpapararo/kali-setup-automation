@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.6.0] - 19-02-2026
+
+### Added
+
+- Added `strace` to apt packages
+- Added cloning of PayloadsAllTheThings to `~/Documents`
+- Added `~/go/bin` to PATH in zshrc alongside Go itself
+
+### Changed
+
+- Removed Ghidra from taskbar launchers
+- Removed Ghidra configuration from README TODO list
+- Scoped `become: true` to only the unarchive task in the Go install block, rather than the whole block
+- Remove conflicting pwntools `checksec` binary after installing the GitHub version
+
 ## [1.5.1] - 14-02-2026
 
 ### Changed
