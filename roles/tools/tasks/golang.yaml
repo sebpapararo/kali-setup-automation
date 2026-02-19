@@ -44,11 +44,3 @@
         line: "export PATH=$PATH:/usr/local/go/bin:{{ ansible_facts['env']['HOME'] }}/go/bin"
         regexp: "^export PATH=$PATH:/usr/local/go/bin:{{ ansible_facts['env']['HOME'] }}/go/bin$"
         state: present
-
-- name: Install nuclei
-  ansible.builtin.command:
-    cmd: /usr/local/go/bin/go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
-  environment:
-    HOME: "{{ ansible_facts['env']['HOME'] }}"
-    GOPATH: "{{ ansible_facts['env']['HOME'] }}/go"
-  changed_when: true

@@ -9,7 +9,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Added `strace` to apt packages
-- Added install for nuclei via `go install`
 - Added cloning of PayloadsAllTheThings to `~/Documents`
 - Added `~/go/bin` to PATH in zshrc alongside Go itself
 
