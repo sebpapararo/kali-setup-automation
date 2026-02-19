@@ -1,6 +1,5 @@
 ---
 - name: Install Golang
-  become: true
   block:
     - name: Check if Go is already installed
       ansible.builtin.stat:
@@ -27,6 +26,7 @@
       when: not tools_go_installed.stat.exists
 
     - name: Extract Go to /usr/local
+      become: true
       ansible.builtin.unarchive:
         src: /tmp/go.tar.gz
         dest: /usr/local
@@ -41,6 +41,14 @@
     - name: Add Go to PATH in zshrc
       ansible.builtin.lineinfile:
         path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
-        line: 'export PATH=$PATH:/usr/local/go/bin'
-        regexp: '^export PATH=.*:/usr/local/go/bin'
+        line: "export PATH=$PATH:/usr/local/go/bin:{{ ansible_facts['env']['HOME'] }}/go/bin"
+        regexp: "^export PATH=$PATH:/usr/local/go/bin:{{ ansible_facts['env']['HOME'] }}/go/bin$"
         state: present
+
+- name: Install nuclei
+  ansible.builtin.command:
+    cmd: /usr/local/go/bin/go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+  environment:
+    HOME: "{{ ansible_facts['env']['HOME'] }}"
+    GOPATH: "{{ ansible_facts['env']['HOME'] }}/go"
+  changed_when: true

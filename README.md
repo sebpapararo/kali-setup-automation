@@ -81,7 +81,6 @@ ansible-playbook site.yaml -t terminal,desktop
 - [ ] Chrome extensions
 - [ ] Firefox extensions
 - [ ] Binary Ninja configuration
-- [ ] Ghidra configuration
 - [ ] Offline tag (offline-only tasks)
 - [ ] Run against remote machine
 - [ ] Ability to change username
