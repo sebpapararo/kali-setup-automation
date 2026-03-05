@@ -15,14 +15,14 @@
 
 - name: Create launcher directory
   ansible.builtin.file:
-    path: ~/.config/xfce4/panel/launcher-{{ desktop_next_plugin_id }}
+    path: "{{ ansible_facts['env']['HOME'] }}/.config/xfce4/panel/launcher-{{ desktop_next_plugin_id }}"
     state: directory
     mode: "0755"
 
 - name: Copy desktop file to launcher directory
   ansible.builtin.copy:
     src: "{{ item.desktop_file }}"
-    dest: ~/.config/xfce4/panel/launcher-{{ desktop_next_plugin_id }}/{{ item.desktop_file | basename }}
+    dest: "{{ ansible_facts['env']['HOME'] }}/.config/xfce4/panel/launcher-{{ desktop_next_plugin_id }}/{{ item.desktop_file | basename }}"
     remote_src: true
     mode: "0644"
 

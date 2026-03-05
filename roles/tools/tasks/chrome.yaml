@@ -29,3 +29,11 @@
       ansible.builtin.file:
         path: /etc/apt/sources.list.d/google-chrome.list
         state: absent
+
+- name: Set Firefox as the default handler web stuff
+  community.general.xdg_mime:
+    mime_types:
+      - x-scheme-handler/https
+      - x-scheme-handler/http
+      - text/html
+    handler: firefox-esr.desktop

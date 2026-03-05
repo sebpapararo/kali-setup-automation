@@ -9,10 +9,22 @@
   community.general.pipx:
     state: present
     name: "{{ item }}"
+    install_deps: true
   loop:
     - bandit
     - git+https://github.com/brightio/penelope
     - git+https://github.com/Pennyw0rth/NetExec
+    - updog
+    - ssh-audit
+    - wesng
+
+- name: Inject packages into existing virtual environments
+  community.general.pipx:
+    state: inject
+    name: "{{ item.name }}"
+    inject_packages: "{{ item.inject }}"
+  loop:
+    - { name: 'wesng', inject: 'chardet' }
 
 - name: Install uv
   block:

@@ -19,6 +19,7 @@
     block: |
       alias lla='ls -la'
       alias llh='ls -lh'
+      alias nmap='sudo nmap'
       alias cat='batcat'
       alias catp='batcat --style plain'
       alias grep='rg'

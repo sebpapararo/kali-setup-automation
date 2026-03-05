@@ -1,0 +1,10 @@
+---
+- name: Install tools via gem
+  become: true
+  community.general.gem:
+    name: "{{ item }}"
+    state: present
+    user_install: false
+  loop:
+    - evil-winrm
+    - readline-ext

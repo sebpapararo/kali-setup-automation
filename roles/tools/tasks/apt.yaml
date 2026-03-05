@@ -60,21 +60,65 @@
     state: present
     update_cache: true
     pkg:
+      - bettercap
+      - bloodhound
       - bruno
       - clangd
+      - cmake
+      - cupp
+      - cyberchef
+      - enum4linux-ng
       - flameshot
       - gdb
       - ghidra
       - gitleaks
+      - gowitness
+      - ipcalc
+      - ipmitool
       - jq
+      - kubectl
+      - libreadline-dev
       - lldb
+      - ltrace
+      - lynis
+      - mdns-scan
+      - mongodb-clients
       - name-that-hash
+      - nbtscan-unixwiz
+      - ntpsec
+      - nuclei
+      - odat
       - openjdk-21-jdk
       - seclists
+      - starship
       - strace
+      - tokei
       - trivy
+      - xrdp
+
+- name: Configure ~/.zshrc to use starship
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - starship"
+    append_newline: true
+    prepend_newline: true
+    block: |
+      eval "$(starship init zsh)"
+
+- name: Remove broken tools
+  become: true
+  ansible.builtin.apt:
+    state: absent
+    pkg:
+      - evil-winrm
+
+- name: Check rockyou.txt.gz hasn't already been removed
+  ansible.builtin.stat:
+    path: "/usr/share/seclists/Passwords/Leaked-Databases/rockyou.txt.tar.gz"
+  register: tools_rockyou_gz
 
 - name: Extract rockyou.txt
+  when: tools_rockyou_gz.stat.exists
   become: true
   ansible.builtin.unarchive:
     src: /usr/share/seclists/Passwords/Leaked-Databases/rockyou.txt.tar.gz
@@ -83,3 +127,23 @@
     owner: root
     group: root
     mode: '0644'
+
+- name: Remove compressed copies of rockyou.txt
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /usr/share/seclists/Passwords/Leaked-Databases/rockyou.txt.tar.gz
+    - /usr/share/wordlists/rockyou.txt.gz
+
+- name: Remove dependencies that are no longer required and purge their configuration files
+  become: true
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true
+
+- name: Perform first run of Nuclei to download templates
+  ansible.builtin.command:
+    cmd: /usr/bin/nuclei
+  changed_when: true
