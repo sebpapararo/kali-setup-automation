@@ -4,6 +4,41 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.7.0] - 13-03-2026
+
+### Added
+
+- Added apt packages: bettercap, bloodhound, cmake, cupp, cyberchef, enum4linux-ng, gowitness, ipcalc, ipmitool, kubectl, libreadline-dev, ltrace, lynis, mdns-scan, mongodb-clients, nbtscan-unixwiz, ntpsec, nuclei, odat, starship, tokei, xrdp
+- Added `nmap` alias (`sudo nmap`) to shell aliases
+- Added new cheatsheet repos cloned to `~/Documents/cheatsheets/`: InternalAllTheThings, HackTricks, reverse-shell-generator, GTFObins, LOLBAS, personal-pentesting-notes, endoflife.date
+- Added new tool repos cloned to `~/Documents/tools/`: testssl.sh, PowerSharpPack
+- Added exploit repo cloned to `~/Documents/exploits/`: mongobleed
+- Added downloads to `~/Documents/tools/`: PrivescCheck.ps1, pspy (32/64-bit variants), linux-exploit-suggester (les.sh), ligolo-ng (agent + proxy, Linux and Windows), RustScan
+- Added new `gem` task to install `evil-winrm` and `readline-ext` via gem
+- Added new `nessus` task to download and install Nessus
+- Added new `windows` task to download and extract Sysinternals Suite
+- Added pipx packages: updog, ssh-audit, wesng (with chardet injected as a dependency)
+- Added `~/Documents/cheatsheets/`, `~/Documents/exploits/`, `~/Documents/tools/`, and `~/Documents/tools/pspy/` directories
+- Added Firefox as the default handler for http/https/html MIME types
+- Added `rustscan` and `legba` to cargo installs
+- Perform first-run of Nuclei after install to download templates
+- Run `apt autoremove --purge` after package installation
+- Remove compressed copies of rockyou.txt after extraction
+
+### Changed
+
+- Moved starship from cargo to apt
+- Moved tokei from cargo to apt
+- Starship zshrc configuration block moved from `rust.yaml` to `apt.yaml`
+- Replaced single PayloadsAllTheThings clone with a loop-based approach covering multiple repos
+- checksec download URL updated to use the `/latest/` redirect
+- evil-winrm removed from apt and replaced with gem install
+- rockyou.txt extraction now checks whether the archive exists before attempting to extract
+
+### Fixed
+
+- Desktop taskbar paths now use `ansible_facts['env']['HOME']` instead of `~` to support non-default usernames
+
 ## [1.6.0] - 19-02-2026
 
 ### Added

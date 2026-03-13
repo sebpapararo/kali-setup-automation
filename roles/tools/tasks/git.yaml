@@ -45,17 +45,150 @@
 - name: Install checksec .deb package
   become: true
   ansible.builtin.apt:
-    deb: "https://github.com/slimm609/checksec/releases/download/{{ tools_checksec_version }}/checksec_{{ tools_checksec_version }}_amd64.deb"
+    deb: "https://github.com/slimm609/checksec/releases/latest/download/checksec_{{ tools_checksec_version }}_amd64.deb"
 
 - name: Remove the pwntools checksec binary as it conflicts with this one and is worse
   ansible.builtin.file:
     path: "{{ ansible_facts['env']['HOME'] }}/.local/bin/checksec"
     state: absent
 
-- name: Clone Payloads All The Things
+- name: Create directories
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/Documents/{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "cheatsheets"
+    - "exploits"
+    - "tools"
+    - "tools/pspy"
+
+- name: Clone useful repos
   ansible.builtin.git:
-    repo: https://github.com/swisskyrepo/PayloadsAllTheThings.git
-    dest: "{{ ansible_facts['env']['HOME'] }}/Documents/PayloadsAllTheThings"
+    repo: "{{ item.repo }}"
+    dest: "{{ ansible_facts['env']['HOME'] }}/Documents/{{ item.type }}s/{{ item.name }}"
     single_branch: true
     depth: 1
-    version: master
+    version: "{{ item.branch }}"
+  loop:
+    - { name: "PayloadsAllTheThings", repo: "https://github.com/swisskyrepo/PayloadsAllTheThings.git", branch: "master", type: "cheatsheet"}
+    - { name: "InternalAllTheThings", repo: "https://github.com/swisskyrepo/InternalAllTheThings.git", branch: "main", type: "cheatsheet"}
+    - { name: "HackTricks", repo: "https://github.com/HackTricks-wiki/hacktricks.git", branch: "master", type: "cheatsheet"}
+    - { name: "reverse-shell-generator", repo: "https://github.com/0dayCTF/reverse-shell-generator.git", branch: "main", type: "cheatsheet"}
+    - { name: "GTFObins", repo: "https://github.com/GTFOBins/GTFOBins.github.io.git", branch: "master", type: "cheatsheet"}
+    - { name: "LOLBAS", repo: "https://github.com/LOLBAS-Project/LOLBAS.git", branch: "master", type: "cheatsheet"}
+    - { name: "personal-pentesting-notes", repo: "https://github.com/sebpapararo/pentesting-notes.git", branch: "main", type: "cheatsheet"}
+    - { name: "endoflife.date", repo: "https://github.com/endoflife-date/endoflife.date.git", branch: "master", type: "cheatsheet"}
+    - { name: "testssl.sh", repo: "https://github.com/testssl/testssl.sh.git", branch: "3.3dev", type: "tool"}
+    - { name: "mongobleed", repo: "https://github.com/joe-desimone/mongobleed.git", branch: "main", type: "exploit"}
+    - { name: "PowerSharpPack", repo: "https://github.com/S3cur3Th1sSh1t/PowerSharpPack.git", branch: "master", type: "tool"}
+
+- name: Download PrivescCheck.ps1
+  ansible.builtin.get_url:
+    url: https://github.com/itm4n/PrivescCheck/releases/latest/download/PrivescCheck.ps1
+    dest: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/PrivescCheck.ps1"
+    mode: "0644"
+
+- name: Download pspy binaries
+  ansible.builtin.get_url:
+    url: https://github.com/DominicBreuker/pspy/releases/latest/download/{{ item }}
+    dest: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/pspy/{{ item }}"
+    mode: "0755"
+  loop:
+    - pspy32
+    - pspy64
+    - pspy32s
+    - pspy64s
+
+- name: Download PrivescCheck.ps1
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/mzet-/linux-exploit-suggester/master/linux-exploit-suggester.sh
+    dest: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/les.sh"
+    mode: "0644"
+
+- name: Check if ligolo-ng agent files already exist
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/ligolo-ng/{{ item }}"
+  loop:
+    - agent
+    - agent.exe
+    - proxy
+  register: tools_ligolng_existing_files
+
+- name: Install ligolo-ng
+  when: tools_ligolng_existing_files.results | selectattr('stat.exists', 'equalto', false) | list | length > 0
+  block:
+    - name: Get latest ligolo-ng version from GitHub
+      ansible.builtin.uri:
+        url: https://api.github.com/repos/nicocha30/ligolo-ng/releases/latest
+        return_content: true
+      register: tools_ligolng_versions
+      changed_when: false
+
+    - name: Extract the version into a variable
+      ansible.builtin.set_fact:
+        tools_ligolng_version: "{{ tools_ligolng_versions.json.tag_name[1:] }}"
+
+    - name: Create ligolo-ng directory
+      ansible.builtin.file:
+        path: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/ligolo-ng"
+        state: directory
+        mode: "0755"
+
+    - name: Download ligolo-ng binaries
+      ansible.builtin.get_url:
+        url: "https://github.com/nicocha30/ligolo-ng/releases/latest/download/ligolo-ng_{{ item }}"
+        dest: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/ligolo-ng/"
+        mode: "0644"
+      loop:
+        - "agent_{{ tools_ligolng_version }}_linux_amd64.tar.gz"
+        - "agent_{{ tools_ligolng_version }}_windows_amd64.zip"
+        - "proxy_{{ tools_ligolng_version }}_linux_amd64.tar.gz"
+
+    - name: Extract ligolo-ng binaries
+      ansible.builtin.unarchive:
+        src: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/ligolo-ng/ligolo-ng_{{ item }}"
+        dest: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/ligolo-ng/"
+        remote_src: true
+      loop:
+        - "agent_{{ tools_ligolng_version }}_linux_amd64.tar.gz"
+        - "agent_{{ tools_ligolng_version }}_windows_amd64.zip"
+        - "proxy_{{ tools_ligolng_version }}_linux_amd64.tar.gz"
+
+    - name: Remove the archives
+      ansible.builtin.file:
+        path: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/ligolo-ng/ligolo-ng_{{ item }}"
+        state: absent
+      loop:
+        - "agent_{{ tools_ligolng_version }}_linux_amd64.tar.gz"
+        - "agent_{{ tools_ligolng_version }}_windows_amd64.zip"
+        - "proxy_{{ tools_ligolng_version }}_linux_amd64.tar.gz"
+
+- name: Get latest RustScan version from GitHub
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/bee-san/rustscan/releases/latest
+    return_content: true
+  register: tools_rustscan_versions
+  changed_when: false
+
+- name: Extract the version into a variable
+  ansible.builtin.set_fact:
+    tools_rustscan_version: "{{ tools_rustscan_versions.json.tag_name }}"
+
+- name: Create RustScan directory
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/rustscan"
+    state: directory
+    mode: "0755"
+
+- name: Download RustScan binaries
+  ansible.builtin.get_url:
+    url: "https://github.com/bee-san/rustscan/releases/latest/download/{{ item }}"
+    dest: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/rustscan/"
+    mode: "0644"
+  loop:
+    - x86-linux-rustscan.zip
+    - x86_64-linux-rustscan.tar.gz.zip
+    - x86-windows-rustscan.exe.zip
+    - x86_64-windows-rustscan.exe.zip
+    - x86_64-macos-rustscan.tar.gz.zip

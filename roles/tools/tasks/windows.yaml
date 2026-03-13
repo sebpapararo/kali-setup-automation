@@ -1,0 +1,23 @@
+---
+- name: Create the Sysinternals tools directory
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/Sysinternals"
+    state: directory
+    mode: '0700'
+
+- name: Download the Sysinternals Suite archve
+  ansible.builtin.get_url:
+    url: https://download.sysinternals.com/files/SysinternalsSuite.zip
+    dest: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/Sysinternals"
+    mode: "0644"
+
+- name: Unarchive the Sysinternals suite
+  ansible.builtin.unarchive:
+    src: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/Sysinternals/SysinternalsSuite.zip"
+    dest: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/Sysinternals"
+    remote_src: true
+
+- name: Remove the Sysinternals archve
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/Sysinternals/SysinternalsSuite.zip"
+    state: absent

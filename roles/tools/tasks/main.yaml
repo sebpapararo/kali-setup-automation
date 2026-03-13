@@ -31,6 +31,10 @@
   ansible.builtin.import_tasks: node.yaml
   tags: node
 
+- name: Install Ruby tools via gem
+  ansible.builtin.import_tasks: gem.yaml
+  tags: gem
+
 - name: Install tools via bash
   ansible.builtin.import_tasks: bash.yaml
   tags: bash
@@ -42,3 +46,11 @@
 - name: Configure Git and install tools
   ansible.builtin.import_tasks: git.yaml
   tags: git
+
+- name: Install Nessus
+  ansible.builtin.import_tasks: nessus.yaml
+  tags: nessus
+
+- name: Install Windows specific tools
+  ansible.builtin.import_tasks: windows.yaml
+  tags: windows
