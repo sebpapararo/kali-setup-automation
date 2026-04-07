@@ -70,6 +70,8 @@
     single_branch: true
     depth: 1
     version: "{{ item.branch }}"
+  retries: 3
+  delay: 3
   loop:
     - { name: "PayloadsAllTheThings", repo: "https://github.com/swisskyrepo/PayloadsAllTheThings.git", branch: "master", type: "cheatsheet"}
     - { name: "InternalAllTheThings", repo: "https://github.com/swisskyrepo/InternalAllTheThings.git", branch: "main", type: "cheatsheet"}
@@ -82,6 +84,7 @@
     - { name: "testssl.sh", repo: "https://github.com/testssl/testssl.sh.git", branch: "3.3dev", type: "tool"}
     - { name: "mongobleed", repo: "https://github.com/joe-desimone/mongobleed.git", branch: "main", type: "exploit"}
     - { name: "PowerSharpPack", repo: "https://github.com/S3cur3Th1sSh1t/PowerSharpPack.git", branch: "master", type: "tool"}
+    - { name: "WADComs", repo: "https://github.com/WADComs/WADComs.github.io.git", branch: "master", type: "cheatsheet"}
 
 - name: Download PrivescCheck.ps1
   ansible.builtin.get_url:
@@ -94,6 +97,8 @@
     url: https://github.com/DominicBreuker/pspy/releases/latest/download/{{ item }}
     dest: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/pspy/{{ item }}"
     mode: "0755"
+  retries: 3
+  delay: 3
   loop:
     - pspy32
     - pspy64
@@ -186,6 +191,8 @@
     url: "https://github.com/bee-san/rustscan/releases/latest/download/{{ item }}"
     dest: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/rustscan/"
     mode: "0644"
+  retries: 3
+  delay: 3
   loop:
     - x86-linux-rustscan.zip
     - x86_64-linux-rustscan.tar.gz.zip

@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.8.0] - 07-04-2026
+
+### Added
+
+- Added apt packages: awscli, feroxbuster, sstimap, wpprobe, xsstrike
+- Added cheatsheet repo cloned to `~/Documents/cheatsheets/`: WADComs
+- Added retries (3 attempts, 3s delay) to git clone and file download tasks for improved reliability
+- Set QTerminal transparency to 0 via qterminal.ini
+
 ## [1.7.0] - 13-03-2026
 
 ### Added

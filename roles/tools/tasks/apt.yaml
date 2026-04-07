@@ -60,6 +60,7 @@
     state: present
     update_cache: true
     pkg:
+      - awscli
       - bettercap
       - bloodhound
       - bruno
@@ -68,6 +69,7 @@
       - cupp
       - cyberchef
       - enum4linux-ng
+      - feroxbuster
       - flameshot
       - gdb
       - ghidra
@@ -90,11 +92,14 @@
       - odat
       - openjdk-21-jdk
       - seclists
+      - sstimap
       - starship
       - strace
       - tokei
       - trivy
+      - wpprobe
       - xrdp
+      - xsstrike
 
 - name: Configure ~/.zshrc to use starship
   ansible.builtin.blockinfile:

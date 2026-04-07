@@ -22,6 +22,33 @@ ansible-playbook site.yaml -t vscode,docker,python
 
 Reboot after completion for all changes to take effect.
 
+## Running Against a Remote Host
+
+Ensure the target host has SSH running and is accessible from this machine.
+
+Add your target host to `inventory/hosts.yaml` under the `remote` group:
+
+```yaml
+remote:
+  hosts:
+    kali-target:
+      ansible_host: 192.168.1.100
+      ansible_user: kali
+```
+
+Then run the playbook targeting that group or host. You will be prompted for the SSH password and sudo password:
+
+```bash
+# Run against all remote hosts
+ansible-playbook site.yaml --limit remote
+
+# Run against a specific host
+ansible-playbook site.yaml --limit kali-target
+
+# Run specific tags against a remote host
+ansible-playbook site.yaml --limit kali-target -t tools
+```
+
 ## Available Tags
 
 ### Main Tags
@@ -82,6 +109,5 @@ ansible-playbook site.yaml -t terminal,desktop
 - [ ] Firefox extensions
 - [ ] Binary Ninja configuration
 - [ ] Offline tag (offline-only tasks)
-- [ ] Run against remote machine
 - [ ] Ability to change username
 - [ ] Ability to change password

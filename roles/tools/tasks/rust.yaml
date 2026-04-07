@@ -23,12 +23,14 @@
         path: /tmp/rustup-init.sh
         state: absent
 
-    - name: Source cargo environment in zshrc (if exists)
-      ansible.builtin.lineinfile:
+    - name: Configure ~/.zshrc to source Cargo environment
+      ansible.builtin.blockinfile:
         path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
-        line: '. "$HOME/.cargo/env"'
-        regexp: '^\. "\$HOME/\.cargo/env"'
-        state: present
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - Cargo env"
+        append_newline: true
+        prepend_newline: true
+        block: |
+          . "$HOME/.cargo/env"
 
     - name: Install some crates via Cargo (will take some time)
       community.general.cargo:
