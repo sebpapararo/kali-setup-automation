@@ -10,6 +10,14 @@
       - ripgrep
       - fzf
 
+- name: Set qterminal transparency to 0
+  community.general.ini_file:
+    path: "{{ ansible_facts['env']['HOME'] }}/.config/qterminal.org/qterminal.ini"
+    section: General
+    option: TerminalTransparency
+    value: "0"
+    mode: '0644'
+
 - name: Add useful aliases to ~/.zshrc & source fzf
   ansible.builtin.blockinfile:
     path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
