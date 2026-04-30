@@ -86,7 +86,7 @@ Use these to install specific tools without running the full `tools` role:
 | `docker` | Docker CE, compose plugin, buildx plugin |
 | `golang` | Go programming language |
 | `node` | Node.js LTS via NVM |
-| `python` | Python tools (pwntools, netexec, bandit, uv, pyenv) |
+| `python` | Python tools (pwntools, angr, netexec, bandit, uv) |
 | `rust` | Rust toolchain, Starship prompt, Zellij terminal multiplexer |
 | `vscode` | VS Code with extensions (BeardedTheme, Material Icons, IntelliJ keybindings, GitLens) |
 
