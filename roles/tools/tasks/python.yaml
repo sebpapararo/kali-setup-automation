@@ -1,9 +1,12 @@
 ---
-- name: Install pwntools globally via pip
+- name: Install global Python packages
   ansible.builtin.pip:
     name: pwntools
     state: present
     break_system_packages: true
+  loop:
+    - pwntools
+    - angr
 
 - name: Install tools via pipx
   community.general.pipx:
@@ -12,10 +15,12 @@
     install_deps: true
   loop:
     - bandit
+    - clairvoyance
     - git+https://github.com/brightio/penelope
     - git+https://github.com/Pennyw0rth/NetExec
-    - updog
+    - smbclientng
     - ssh-audit
+    - updog
     - wesng
 
 - name: Inject packages into existing virtual environments
@@ -48,40 +53,4 @@
     - name: Clean up uv installer
       ansible.builtin.file:
         path: /tmp/uv-init.sh
-        state: absent
-
-- name: Install pyenv
-  block:
-    - name: Check if pyenv is already installed
-      ansible.builtin.stat:
-        path: "{{ ansible_facts['env']['HOME'] }}/.pyenv/bin/pyenv"
-      register: tools_pyenv_installed
-
-    - name: Download pyenv installer
-      ansible.builtin.get_url:
-        url: https://pyenv.run
-        dest: /tmp/pyenv-init.sh
-        mode: '0755'
-      when: not tools_pyenv_installed.stat.exists
-
-    - name: Run pyenv installer
-      ansible.builtin.command: /tmp/pyenv-init.sh
-      when: not tools_pyenv_installed.stat.exists
-      changed_when: true
-
-    - name: Setup shell environment for pyenv
-      ansible.builtin.blockinfile:
-        path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - pyenv"
-        append_newline: true
-        prepend_newline: true
-        block: |
-          export PYENV_ROOT="$HOME/.pyenv"
-          [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-          eval "$(pyenv init - zsh)"
-      when: not tools_pyenv_installed.stat.exists
-
-    - name: Clean up pyenv installer
-      ansible.builtin.file:
-        path: /tmp/pyenv-init.sh
         state: absent

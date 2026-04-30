@@ -77,6 +77,7 @@
       - gowitness
       - ipcalc
       - ipmitool
+      - jadx
       - jq
       - kubectl
       - libreadline-dev
@@ -92,6 +93,7 @@
       - odat
       - openjdk-21-jdk
       - seclists
+      - snmp-mibs-downloader
       - sstimap
       - starship
       - strace
