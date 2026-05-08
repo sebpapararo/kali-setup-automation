@@ -27,15 +27,19 @@
 
     - name: Run nvm installer
       ansible.builtin.command: /tmp/nvm-init.sh
+      environment:
+        NVM_DIR: "{{ ansible_facts['env']['HOME'] }}/.config/nvm"
       when: not tools_nvm_installed.stat.exists
       changed_when: true
 
     - name: Install Node.js LTS via nvm
       ansible.builtin.shell: |
-        source {{ ansible_facts['env']['HOME'] }}/.nvm/nvm.sh
+        source {{ ansible_facts['env']['HOME'] }}/.config/nvm/nvm.sh
         nvm install --lts
       args:
         executable: /bin/bash
+      environment:
+        NVM_DIR: "{{ ansible_facts['env']['HOME'] }}/.config/nvm"
       when: not tools_nvm_installed.stat.exists
       changed_when: true
 
