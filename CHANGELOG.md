@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.9.1] - 08-05-2026
+
+### Added
+
+- Added small SSH config to assist in connecting to older hosts
+
+### Fixed
+
+- Fix nvm installer location by setting `NVM_DIR` to `~/.config/nvm`
+
 ## [1.9.0] - 30-04-2026
 
 ### Added

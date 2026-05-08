@@ -10,3 +10,9 @@
     path: "{{ ansible_facts['env']['HOME'] }}/.ssh/id_ed25519"
     type: ed25519
     comment: "{{ ansible_facts['env']['USER'] }}@{{ ansible_facts['hostname'] }}"
+
+- name: Copy the ssh config file
+  ansible.builtin.copy:
+    src: ssh.config
+    dest: "{{ ansible_facts['env']['HOME'] }}/.ssh/config"
+    mode: '0600'
