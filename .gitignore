@@ -14,6 +14,8 @@ Thumbs.db
 
 # Secrets and credentials
 *vault*
+# Not a secret so exempt it
+!roles/tools/files/obsidian_base_vault.tar.gz
 *.key
 *.pem
 secrets/

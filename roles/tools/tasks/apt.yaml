@@ -93,6 +93,7 @@
       - odat
       - openjdk-21-jdk
       - seclists
+      - sippts
       - snmp-mibs-downloader
       - sstimap
       - starship

@@ -1,0 +1,18 @@
+---
+- name: Create custom tools directory
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/custom"
+    state: directory
+    mode: "0755"
+
+- name: Copy nmap_to_md.py
+  ansible.builtin.copy:
+    src: custom_tooling/nmap_to_md.py
+    dest: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/custom/nmap_to_md.py"
+    mode: "0755"
+
+- name: Copy ssh_audit_parser.py
+  ansible.builtin.copy:
+    src: custom_tooling/ssh_audit_parser.py
+    dest: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/custom/ssh_audit_parser.py"
+    mode: "0755"

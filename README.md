@@ -83,9 +83,11 @@ Use these to install specific tools without running the full `tools` role:
 | `bash` | Install tools via bash |
 | `binaryninja` | Install Binary Ninja and menu shortcut |
 | `chrome` | Google Chrome browser |
+| `custom` | Deploy in-house scripts to `~/Documents/tools/custom/` |
 | `docker` | Docker CE, compose plugin, buildx plugin |
 | `golang` | Go programming language |
 | `node` | Node.js LTS via NVM |
+| `obsidian` | Install Obsidian and extract base vault to `~/Documents/Obsidian Job Notes/` |
 | `python` | Python tools (pwntools, angr, netexec, bandit, uv) |
 | `rust` | Rust toolchain, Starship prompt, Zellij terminal multiplexer |
 | `vscode` | VS Code with extensions (BeardedTheme, Material Icons, IntelliJ keybindings, GitLens) |
