@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.10.0] - 13-05-2026
+
+### Added
+
+- Added new `obsidian` task to install Obsidian and extract a base vault into `~/Documents/Obsidian Job Notes/`
+- Added new `custom` task to deploy in-house scripts to `~/Documents/tools/custom/` (currently ships `nmap_to_md.py`)
+- Added apt package: sippts
+- Added pipx package: defaultcreds-cheat-sheet
+
 ## [1.9.1] - 08-05-2026
 
 ### Added

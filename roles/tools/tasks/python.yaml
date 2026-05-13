@@ -16,6 +16,7 @@
   loop:
     - bandit
     - clairvoyance
+    - defaultcreds-cheat-sheet
     - git+https://github.com/brightio/penelope
     - git+https://github.com/Pennyw0rth/NetExec
     - smbclientng

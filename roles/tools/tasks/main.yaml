@@ -54,3 +54,11 @@
 - name: Install Windows specific tools
   ansible.builtin.import_tasks: windows.yaml
   tags: windows
+
+- name: Install custom tools
+  ansible.builtin.import_tasks: custom.yaml
+  tags: custom
+
+- name: Install & configure Obsidian
+  ansible.builtin.import_tasks: obsidian.yaml
+  tags: obsidian

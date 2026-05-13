@@ -1,0 +1,27 @@
+---
+- name: Get latest Obsidian version from GitHub
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/obsidianmd/obsidian-releases/releases/latest
+    return_content: true
+  register: tools_git_obsidian_versions
+  changed_when: false
+
+- name: Extract the version into a variable
+  ansible.builtin.set_fact:
+    tools_obsidian_version: "{{ tools_git_obsidian_versions.json.tag_name[1:] }}"
+
+- name: Install Obsidian .deb package
+  become: true
+  ansible.builtin.apt:
+    deb: "https://github.com/obsidianmd/obsidian-releases/releases/latest/download/obsidian_{{ tools_obsidian_version }}_amd64.deb"
+
+- name: Check if Obsidian base vault is already extracted
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['env']['HOME'] }}/Documents/Obsidian Job Notes"
+  register: tools_obsidian_vault
+
+- name: Extract Obsidian base vault into ~/Documents
+  ansible.builtin.unarchive:
+    src: obsidian_base_vault.tar.gz
+    dest: "{{ ansible_facts['env']['HOME'] }}/Documents"
+  when: not tools_obsidian_vault.stat.exists
