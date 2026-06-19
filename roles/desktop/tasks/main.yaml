@@ -6,7 +6,6 @@
     update_cache: true
     pkg:
       - kali-wallpapers-2024
-      - menulibre
 
 - name: Set desktop background image
   community.general.xfconf:

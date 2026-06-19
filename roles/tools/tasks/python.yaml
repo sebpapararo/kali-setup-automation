@@ -15,10 +15,12 @@
     install_deps: true
   loop:
     - bandit
+    - bloodyAD
     - clairvoyance
     - defaultcreds-cheat-sheet
-    - git+https://github.com/brightio/penelope
+    - git-dumper
     - git+https://github.com/Pennyw0rth/NetExec
+    - penelope-shell-handler
     - smbclientng
     - ssh-audit
     - updog

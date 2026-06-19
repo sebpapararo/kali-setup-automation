@@ -85,6 +85,8 @@
     - { name: "mongobleed", repo: "https://github.com/joe-desimone/mongobleed.git", branch: "main", type: "exploit"}
     - { name: "PowerSharpPack", repo: "https://github.com/S3cur3Th1sSh1t/PowerSharpPack.git", branch: "master", type: "tool"}
     - { name: "WADComs", repo: "https://github.com/WADComs/WADComs.github.io.git", branch: "master", type: "cheatsheet"}
+    - { name: "PRET", repo: "https://github.com/RUB-NDS/PRET.git", branch: "master", type: "tool"}
+    - { name: "adPEAS", repo: "https://github.com/61106960/adPEAS.git", branch: "main", type: "tool"}
 
 - name: Download PrivescCheck.ps1
   ansible.builtin.get_url:
@@ -199,3 +201,19 @@
     - x86-windows-rustscan.exe.zip
     - x86_64-windows-rustscan.exe.zip
     - x86_64-macos-rustscan.tar.gz.zip
+
+- name: Get latest dive version from GitHub
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/wagoodman/dive/releases/latest
+    return_content: true
+  register: tools_git_dive_versions
+  changed_when: false
+
+- name: Extract the version into a variable
+  ansible.builtin.set_fact:
+    tools_dive_version: "{{ tools_git_dive_versions.json.tag_name[1:] }}"
+
+- name: Install dive .deb package
+  become: true
+  ansible.builtin.apt:
+    deb: "https://github.com/wagoodman/dive/releases/latest/download/dive_{{ tools_dive_version }}_linux_amd64.deb"
