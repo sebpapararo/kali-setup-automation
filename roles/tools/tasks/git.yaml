@@ -86,6 +86,7 @@
     - { name: "PowerSharpPack", repo: "https://github.com/S3cur3Th1sSh1t/PowerSharpPack.git", branch: "master", type: "tool"}
     - { name: "WADComs", repo: "https://github.com/WADComs/WADComs.github.io.git", branch: "master", type: "cheatsheet"}
     - { name: "PRET", repo: "https://github.com/RUB-NDS/PRET.git", branch: "master", type: "tool"}
+    - { name: "adPEAS", repo: "https://github.com/61106960/adPEAS.git", branch: "main", type: "tool"}
 
 - name: Download PrivescCheck.ps1
   ansible.builtin.get_url:

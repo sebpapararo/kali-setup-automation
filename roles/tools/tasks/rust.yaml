@@ -35,9 +35,10 @@
     - name: Install some crates via Cargo (will take some time)
       community.general.cargo:
         name:
-          - zellij
-          - rustscan
           - legba
+          - rusthound-ce
+          - rustscan
+          - zellij
         locked: true
         state: present
         executable: "{{ ansible_facts['env']['HOME'] }}/.cargo/bin/cargo"
