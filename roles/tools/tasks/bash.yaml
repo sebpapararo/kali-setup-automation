@@ -59,3 +59,28 @@
         src: gdbinit
         dest: "{{ ansible_facts['env']['HOME'] }}/.gdbinit"
         mode: '0664'
+
+- name: Install Trufflehog
+  block:
+    - name: Check if Trufflehog is already installed
+      ansible.builtin.stat:
+        path: "/usr/local/bin/trufflehog"
+      register: tools_trufflehog_installed
+
+    - name: Download Trufflehog installer
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh
+        dest: /tmp/trufflehog-init.sh
+        mode: '0755'
+      when: not tools_trufflehog_installed.stat.exists
+
+    - name: Run Trufflehog installer
+      ansible.builtin.command: /tmp/trufflehog-init.sh -b /usr/local/bin
+      when: not tools_trufflehog_installed.stat.exists
+      changed_when: true
+      become: true
+
+    - name: Clean up Trufflehog installer
+      ansible.builtin.file:
+        path: /tmp/trufflehog-init.sh
+        state: absent
