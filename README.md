@@ -70,6 +70,7 @@ Use these to run specific system configuration tasks:
 | `autologin` | Enable autologin for current user |
 | `cleanup` | Remove unused home directories (Music, Pictures, etc.) |
 | `regional` | Regional settings (locale, keyboard, timezone) |
+| `shared_folder` | Enable VMware shared folders via `/etc/fstab` (vmhgfs-fuse) |
 | `upgrade` | APT sources modernization and full package upgrade |
 | `xfce` | Disable XFCE power management, screensaver, and screen lock |
 
@@ -79,18 +80,22 @@ Use these to install specific tools without running the full `tools` role:
 
 | Tag | Description |
 |-----|-------------|
-| `apt` | APT packages (Trivy, Bruno, checksec, clangd, flameshot, gdb, ghidra, gitleaks, lldb, openjdk-21-jdk) |
-| `bash` | Install tools via bash |
+| `apt` | APT packages (Trivy, Bruno, checksec, clangd, flameshot, gdb, ghidra, gitleaks, goshs, lldb, openjdk-21-jdk, and many more) |
+| `bash` | Tools installed via upstream bash installers (Opengrep, pwndbg for GDB & LLDB, Trufflehog) |
 | `binaryninja` | Install Binary Ninja and menu shortcut |
 | `chrome` | Google Chrome browser |
 | `custom` | Deploy in-house scripts to `~/Documents/tools/custom/` |
 | `docker` | Docker CE, compose plugin, buildx plugin |
+| `gem` | Ruby gems (evil-winrm, readline-ext) |
+| `git` | Global Git defaults, checksec/dive `.deb` installs, and clone pentest cheatsheet/tool/exploit repos plus standalone downloads (pspy, PrivescCheck, les.sh, ligolo-ng, RustScan) into `~/Documents/` |
 | `golang` | Go programming language |
+| `nessus` | Download and install Tenable Nessus |
 | `node` | Node.js LTS via NVM |
 | `obsidian` | Install Obsidian and extract base vault to `~/Documents/Obsidian Job Notes/` |
 | `python` | Python tools (pwntools, angr, netexec, bandit, uv) |
 | `rust` | Rust toolchain, Starship prompt, Zellij terminal multiplexer |
 | `vscode` | VS Code with extensions (BeardedTheme, Material Icons, IntelliJ keybindings, GitLens) |
+| `windows` | Download and extract Sysinternals Suite to `~/Documents/tools/Sysinternals/` |
 
 ### Examples
 
