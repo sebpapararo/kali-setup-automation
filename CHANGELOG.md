@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.11.0] - 07-07-2026
+
+### Added
+
+- Added apt packages: gdbserver, goshs
+- Added Trufflehog install (via upstream installer script) to the `bash` task
+- Added dive install (via `.deb`) to the `git` task
+- Added pipx packages: bloodyAD, git-dumper
+- Added `rusthound-ce` to cargo installs
+- Added tool repos cloned to `~/Documents/tools/`: PRET, adPEAS
+
+### Changed
+
+- Replaced `penelope` (installed from `git+https://github.com/brightio/penelope`) with the `penelope-shell-handler` pipx package
+
+### Removed
+
+- Removed `menulibre` from the desktop role apt packages
+
 ## [1.10.0] - 13-05-2026
 
 ### Added
