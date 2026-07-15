@@ -13,6 +13,8 @@
     state: present
     name: "{{ item }}"
     install_deps: true
+  environment:
+    PATH: "{{ ansible_facts['env']['HOME'] }}/.cargo/bin:{{ ansible_facts['env']['PATH'] }}"
   loop:
     - bandit
     - bloodyAD

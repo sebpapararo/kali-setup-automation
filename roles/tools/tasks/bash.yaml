@@ -60,6 +60,30 @@
         dest: "{{ ansible_facts['env']['HOME'] }}/.gdbinit"
         mode: '0664'
 
+- name: Install pwnellij for pwndbg
+  block:
+    - name: Check if pwnellij is already installed
+      ansible.builtin.stat:
+        path: "{{ ansible_facts['env']['HOME'] }}/.local/bin/pwnellij"
+      register: tools_pwnellij_installed
+
+    - name: Download pwnellij installer
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/sebpapararo/pwnellij/master/scripts/install.sh
+        dest: /tmp/pwnellij-init.sh
+        mode: '0755'
+      when: not tools_pwnellij_installed.stat.exists
+
+    - name: Run pwnellij installer
+      ansible.builtin.command: /tmp/pwnellij-init.sh
+      when: not tools_pwnellij_installed.stat.exists
+      changed_when: true
+
+    - name: Clean up pwnellij installer
+      ansible.builtin.file:
+        path: /tmp/pwnellij-init.sh
+        state: absent
+
 - name: Install Trufflehog
   block:
     - name: Check if Trufflehog is already installed
