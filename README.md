@@ -81,7 +81,7 @@ Use these to install specific tools without running the full `tools` role:
 | Tag | Description |
 |-----|-------------|
 | `apt` | APT packages (Trivy, Bruno, checksec, clangd, flameshot, gdb, ghidra, gitleaks, goshs, lldb, openjdk-21-jdk, and many more) |
-| `bash` | Tools installed via upstream bash installers (Opengrep, pwndbg for GDB & LLDB, Trufflehog) |
+| `bash` | Tools installed via upstream bash installers (Opengrep, pwndbg for GDB & LLDB, pwnellij, Trufflehog) |
 | `binaryninja` | Install Binary Ninja and menu shortcut |
 | `chrome` | Google Chrome browser |
 | `custom` | Deploy in-house scripts to `~/Documents/tools/custom/` |

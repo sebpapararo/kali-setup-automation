@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.12.0] - 24-07-2026
+
+### Added
+
+- Added pwnellij install (via upstream installer script) to the `bash` task
+
+### Changed
+
+- Reverted starship install from apt back to cargo, and moved its zshrc configuration block back from `apt.yaml` to `rust.yaml`
+
 ## [1.11.0] - 07-07-2026
 
 ### Added

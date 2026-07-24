@@ -38,22 +38,24 @@
           - legba
           - rusthound-ce
           - rustscan
+          - starship
           - zellij
         locked: true
         state: present
         executable: "{{ ansible_facts['env']['HOME'] }}/.cargo/bin/cargo"
       when: not tools_rustup_installed.stat.exists
 
-    - name: Configure ~/.zshrc to use zellij
+    - name: Configure ~/.zshrc to use starship & zellij
       ansible.builtin.blockinfile:
         path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - zellij"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - starship & zellij"
         append_newline: true
         prepend_newline: true
         block: |
           if [[ "$TERM_PROGRAM" != "vscode" ]]; then
             eval "$(zellij setup --generate-auto-start zsh)"
           fi
+          eval "$(starship init zsh)"
       when: not tools_rustup_installed.stat.exists
 
     - name: Ensure the zellij config directory exists
