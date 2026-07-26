@@ -1,0 +1,52 @@
+---
+- name: Check whether Ghidra is installed
+  ansible.builtin.stat:
+    path: /usr/share/ghidra/Ghidra/application.properties
+  register: tools_ghidra_appprops_stat
+
+- name: Customise Ghidra
+  when: tools_ghidra_appprops_stat.stat.exists
+  block:
+    - name: Read Ghidra application properties
+      ansible.builtin.slurp:
+        src: /usr/share/ghidra/Ghidra/application.properties
+      register: tools_ghidra_appprops
+
+    - name: Determine Ghidra version and user settings directory
+      ansible.builtin.set_fact:
+        tools_ghidra_version: "{{ tools_ghidra_appprops.content | b64decode | regex_search('application.version=([0-9.]+)', '\\1') | first }}"
+
+    - name: Set Ghidra settings directory fact
+      ansible.builtin.set_fact:
+        # Ghidra 12.x stores user settings under $HOME/.config/<app>/<app>_<version>
+        tools_ghidra_settings_dir: "{{ ansible_facts['env']['HOME'] }}/.config/ghidra/ghidra_{{ tools_ghidra_version }}"
+
+    - name: Create Ghidra themes and tools directories
+      ansible.builtin.file:
+        path: "{{ tools_ghidra_settings_dir }}/{{ item }}"
+        state: directory
+        mode: "0755"
+      loop:
+        - themes
+        - tools
+
+    - name: Copy the Flat Dark Theme (Mine) into Ghidra
+      ansible.builtin.copy:
+        src: "Flat_Dark_Theme_(Mine).theme"
+        dest: "{{ tools_ghidra_settings_dir }}/themes/Flat_Dark_Theme_(Mine).theme"
+        mode: "0644"
+
+    - name: Select the Flat Dark Theme (Mine) as the active theme
+      ansible.builtin.lineinfile:
+        path: "{{ tools_ghidra_settings_dir }}/preferences"
+        regexp: '^Theme='
+        line: "Theme=Flat Dark Theme (Mine)"
+        create: true
+        mode: "0644"
+
+    - name: Deploy the exported CodeBrowser tool configuration
+      # Named CodeBrowser.tool so it overrides the default tool used when opening a program
+      ansible.builtin.copy:
+        src: "Ghidra Tool.tool"
+        dest: "{{ tools_ghidra_settings_dir }}/tools/CodeBrowser.tool"
+        mode: "0644"

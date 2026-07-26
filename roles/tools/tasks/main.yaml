@@ -43,6 +43,10 @@
   ansible.builtin.import_tasks: binaryninja.yaml
   tags: binaryninja
 
+- name: Customise Ghidra
+  ansible.builtin.import_tasks: ghidra.yaml
+  tags: ghidra
+
 - name: Configure Git and install tools
   ansible.builtin.import_tasks: git.yaml
   tags: git
