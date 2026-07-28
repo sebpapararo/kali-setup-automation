@@ -145,5 +145,5 @@
 
 - name: Perform first run of Nuclei to download templates
   ansible.builtin.command:
-    cmd: /usr/bin/nuclei
+    cmd: /usr/bin/nuclei -update-templates
   changed_when: true
