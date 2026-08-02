@@ -105,11 +105,12 @@
       - xrdp
       - xsstrike
 
-- name: Remove broken tools
+- name: Remove unnecessary tools
   become: true
   ansible.builtin.apt:
     state: absent
     pkg:
+      - burpsuite
       - evil-winrm
 
 - name: Check rockyou.txt.gz hasn't already been removed

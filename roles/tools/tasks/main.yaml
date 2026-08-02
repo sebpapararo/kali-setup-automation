@@ -43,6 +43,10 @@
   ansible.builtin.import_tasks: binaryninja.yaml
   tags: binaryninja
 
+- name: Install Burp Suite Professional
+  ansible.builtin.import_tasks: burpsuite.yaml
+  tags: burpsuite
+
 - name: Customise Ghidra
   ansible.builtin.import_tasks: ghidra.yaml
   tags: ghidra
