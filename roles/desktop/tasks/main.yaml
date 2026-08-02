@@ -53,9 +53,10 @@
   ansible.builtin.include_tasks: add_taskbar_launcher.yaml
   loop:
     - { position: 3, desktop_file: "/usr/share/applications/google-chrome.desktop"}
-    - { position: 4, desktop_file: "/usr/share/applications/binaryninja.desktop"}
-    - { position: 5, desktop_file: "/usr/share/applications/org.wireshark.Wireshark.desktop"}
-    - { position: 6, desktop_file: "/usr/share/applications/bruno.desktop"}
-    - { position: 7, desktop_file: "/usr/share/applications/kali-burpsuite.desktop"}
-    - { position: 8, desktop_file: "/usr/share/applications/code.desktop"}
-    - { position: 9, desktop_file: "/usr/share/applications/obsidian.desktop"}
+    - { position: 4, desktop_file: "/usr/share/applications/kali-ghidra.desktop"}
+    - { position: 5, desktop_file: "/usr/share/applications/binaryninja.desktop"}
+    - { position: 6, desktop_file: "/usr/share/applications/org.wireshark.Wireshark.desktop"}
+    - { position: 7, desktop_file: "/usr/share/applications/bruno.desktop"}
+    - { position: 8, desktop_file: "/usr/share/applications/kali-burpsuite.desktop"}
+    - { position: 9, desktop_file: "/usr/share/applications/code.desktop"}
+    - { position: 10, desktop_file: "/usr/share/applications/obsidian.desktop"}

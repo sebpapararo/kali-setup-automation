@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.13.0] - 26-07-2026
+
+### Added
+
+- Added Ghidra back to the desktop taskbar launchers
+- Added new `ghidra` task to apply a custom theme (Flat Dark Theme (Mine)) and CodeBrowser tool configuration
+- Added Remote - SSH (`ms-vscode-remote.remote-ssh`) to the VS Code extensions
+
+### Removed
+
+- Removed the custom "new context" separator hook from `~/.gdbinit`
+
 ## [1.12.0] - 24-07-2026
 
 ### Added

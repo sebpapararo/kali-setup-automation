@@ -87,6 +87,7 @@ Use these to install specific tools without running the full `tools` role:
 | `custom` | Deploy in-house scripts to `~/Documents/tools/custom/` |
 | `docker` | Docker CE, compose plugin, buildx plugin |
 | `gem` | Ruby gems (evil-winrm, readline-ext) |
+| `ghidra` | Apply custom Ghidra theme (Flat Dark Theme (Mine)) and CodeBrowser tool configuration |
 | `git` | Global Git defaults, checksec/dive `.deb` installs, and clone pentest cheatsheet/tool/exploit repos plus standalone downloads (pspy, PrivescCheck, les.sh, ligolo-ng, RustScan) into `~/Documents/` |
 | `golang` | Go programming language |
 | `nessus` | Download and install Tenable Nessus |
@@ -94,7 +95,7 @@ Use these to install specific tools without running the full `tools` role:
 | `obsidian` | Install Obsidian and extract base vault to `~/Documents/Obsidian Job Notes/` |
 | `python` | Python tools (pwntools, angr, netexec, bandit, uv) |
 | `rust` | Rust toolchain, Starship prompt, Zellij terminal multiplexer |
-| `vscode` | VS Code with extensions (BeardedTheme, Material Icons, IntelliJ keybindings, GitLens) |
+| `vscode` | VS Code with extensions (BeardedTheme, Material Icons, IntelliJ keybindings, GitLens, Remote - SSH) |
 | `windows` | Download and extract Sysinternals Suite to `~/Documents/tools/Sysinternals/` |
 
 ### Examples
@@ -112,9 +113,8 @@ ansible-playbook site.yaml -t terminal,desktop
 
 ## Roadmap
 
-- [ ] Chrome extensions
-- [ ] Firefox extensions
-- [ ] Binary Ninja configuration
-- [ ] Offline tag (offline-only tasks)
-- [ ] Ability to change username
-- [ ] Ability to change password
+- Chrome extensions
+- Firefox extensions
+- Offline tag (offline-only tasks)
+- Create categories e.g. Web, Inf, VR etc so not everything needs to be installed for every VM depending on the Job
+- Ability to change password
