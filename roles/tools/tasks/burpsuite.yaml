@@ -1,0 +1,54 @@
+---
+- name: Install Burp Suite Professional
+  block:
+    - name: Check if Burp Suite Professional is already installed
+      ansible.builtin.stat:
+        path: /opt/BurpSuitePro/BurpSuite
+      register: tools_burpsuite_installed
+
+    - name: Get latest Burp Suite version
+      ansible.builtin.uri:
+        url: https://portswigger.net/burp/releases/data?pageSize=1
+        return_content: true
+      register: tools_burpsuite_releases
+      changed_when: false
+      when: not tools_burpsuite_installed.stat.exists
+
+    - name: Extract the latest version into a variable
+      ansible.builtin.set_fact:
+        tools_burpsuite_version: "{{ tools_burpsuite_releases.json.ResultSet.Results[0].version }}"
+      when: not tools_burpsuite_installed.stat.exists
+
+    - name: Download the Burp Suite Professional installer
+      # PortSwigger ships a single desktop installer; the Professional edition is
+      # unlocked by entering a Pro licence key on first launch.
+      ansible.builtin.get_url:
+        url: "https://portswigger.net/burp/releases/download?product=desktop&version={{ tools_burpsuite_version }}&type=linux"
+        dest: /tmp/burpsuite_pro_installer.sh
+        mode: "0755"
+      when: not tools_burpsuite_installed.stat.exists
+
+    - name: Run the Burp Suite Professional installer unattended
+      become: true
+      ansible.builtin.command:
+        cmd: /tmp/burpsuite_pro_installer.sh -q -dir /opt/BurpSuitePro -overwrite
+        creates: /opt/BurpSuitePro/BurpSuite
+      when: not tools_burpsuite_installed.stat.exists
+
+    - name: Remove the Burp Suite Professional installer
+      ansible.builtin.file:
+        path: /tmp/burpsuite_pro_installer.sh
+        state: absent
+
+    - name: Create symlink for Burp Suite Professional in ~/.local/bin
+      ansible.builtin.file:
+        src: /opt/BurpSuitePro/BurpSuite
+        dest: "{{ ansible_facts['env']['HOME'] }}/.local/bin/burpsuitepro"
+        state: link
+
+    - name: Install the Burp Suite Professional desktop entry
+      become: true
+      ansible.builtin.copy:
+        src: burpsuite-pro.desktop
+        dest: /usr/share/applications/burpsuite-pro.desktop
+        mode: "0644"

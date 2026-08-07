@@ -83,6 +83,7 @@ Use these to install specific tools without running the full `tools` role:
 | `apt` | APT packages (Trivy, Bruno, checksec, clangd, flameshot, gdb, ghidra, gitleaks, goshs, lldb, openjdk-21-jdk, and many more) |
 | `bash` | Tools installed via upstream bash installers (Opengrep, pwndbg for GDB & LLDB, pwnellij, Trufflehog) |
 | `binaryninja` | Install Binary Ninja and menu shortcut |
+| `burpsuite` | Install the latest Burp Suite Professional (activate with a Pro licence on first launch) |
 | `chrome` | Google Chrome browser |
 | `custom` | Deploy in-house scripts to `~/Documents/tools/custom/` |
 | `docker` | Docker CE, compose plugin, buildx plugin |

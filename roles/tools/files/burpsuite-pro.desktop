@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Burp Suite Professional
+Comment=Web application security testing platform
+Exec="/opt/BurpSuitePro/BurpSuite" %U
+Icon=/opt/BurpSuitePro/.install4j/BurpSuite.png
+MimeType=application/x-extension-burp;x-scheme-handler/burp;
+Categories=Network;Security;
+StartupWMClass=install4j-burp-StartBurp
+Terminal=false

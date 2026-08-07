@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.14.0] - 02-08-2026
+
+### Added
+
+- Added new `burpsuite` task to install the latest Burp Suite Professional (unattended) with a menu shortcut
+
+### Changed
+
+- Swapped the desktop taskbar launcher from Burp Suite Community (`kali-burpsuite.desktop`) to Burp Suite Professional
+
+### Removed
+
+- Removed the bundled `burpsuite` (Community) apt package in favour of the Professional install
+
 ## [1.13.0] - 26-07-2026
 
 ### Added
