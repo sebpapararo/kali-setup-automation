@@ -1,16 +1,10 @@
 ---
-- name: Download Trivy GPG key
+- name: Add Trivy signing key
   become: true
   ansible.builtin.get_url:
     url: https://aquasecurity.github.io/trivy-repo/deb/public.key
-    dest: /tmp/trivy.asc
+    dest: /etc/apt/keyrings/trivy.asc
     mode: "0644"
-
-- name: Dearmor Trivy GPG key
-  become: true
-  ansible.builtin.shell:
-    cmd: gpg --dearmor < /tmp/trivy.asc > /usr/share/keyrings/trivy.gpg
-    creates: /usr/share/keyrings/trivy.gpg
 
 - name: Add Trivy APT repository
   become: true
@@ -20,26 +14,14 @@
     uris: https://aquasecurity.github.io/trivy-repo/deb
     suites: generic
     components: main
-    signed_by: /usr/share/keyrings/trivy.gpg
+    signed_by: /etc/apt/keyrings/trivy.asc
     state: present
 
-- name: Download Bruno GPG key
+- name: Add Bruno signing key
   become: true
   ansible.builtin.get_url:
     url: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x9FA6017ECABE0266"
-    dest: /tmp/bruno.asc
-    mode: "0644"
-
-- name: Dearmor Bruno GPG key
-  become: true
-  ansible.builtin.shell:
-    cmd: gpg --dearmor < /tmp/bruno.asc > /etc/apt/keyrings/bruno.gpg
-    creates: /etc/apt/keyrings/bruno.gpg
-
-- name: Set Bruno GPG key permissions
-  become: true
-  ansible.builtin.file:
-    path: /etc/apt/keyrings/bruno.gpg
+    dest: /etc/apt/keyrings/bruno.asc
     mode: "0644"
 
 - name: Add Bruno APT repository
@@ -51,7 +33,7 @@
     uris: http://debian.usebruno.com/
     suites: bruno
     components: stable
-    signed_by: /etc/apt/keyrings/bruno.gpg
+    signed_by: /etc/apt/keyrings/bruno.asc
     state: present
 
 - name: Install tools via APT
@@ -59,59 +41,13 @@
   ansible.builtin.apt:
     state: present
     update_cache: true
-    pkg:
-      - awscli
-      - bettercap
-      - bloodhound
-      - bruno
-      - clangd
-      - cmake
-      - cupp
-      - cyberchef
-      - enum4linux-ng
-      - feroxbuster
-      - flameshot
-      - gdb
-      - gdbserver
-      - ghidra
-      - gitleaks
-      - goshs
-      - gowitness
-      - ipcalc
-      - ipmitool
-      - jadx
-      - jq
-      - kubectl
-      - libreadline-dev
-      - lldb
-      - ltrace
-      - lynis
-      - mdns-scan
-      - mongodb-clients
-      - name-that-hash
-      - nbtscan-unixwiz
-      - ntpsec
-      - nuclei
-      - odat
-      - openjdk-21-jdk
-      - seclists
-      - sippts
-      - snmp-mibs-downloader
-      - sstimap
-      - strace
-      - tokei
-      - trivy
-      - wpprobe
-      - xrdp
-      - xsstrike
+    pkg: "{{ tools_apt_packages }}"
 
 - name: Remove unnecessary tools
   become: true
   ansible.builtin.apt:
     state: absent
-    pkg:
-      - burpsuite
-      - evil-winrm
+    pkg: "{{ tools_apt_packages_absent }}"
 
 - name: Check rockyou.txt.gz hasn't already been removed
   ansible.builtin.stat:

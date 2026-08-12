@@ -30,12 +30,7 @@
     - name: Install VS Code extensions
       ansible.builtin.command:
         cmd: "code --install-extension {{ item }}"
-      loop:
-        - beardedbear.beardedtheme
-        - pkief.material-icon-theme
-        - k--kato.intellij-idea-keybindings
-        - eamodio.gitlens
-        - ms-vscode-remote.remote-ssh
+      loop: "{{ tools_vscode_extensions }}"
       register: tools_vscode_extension_result
       changed_when: "'is already installed' not in tools_vscode_extension_result.stdout"
 

@@ -38,9 +38,11 @@
         path: /tmp/go.tar.gz
         state: absent
 
-    - name: Add Go to PATH in zshrc
-      ansible.builtin.lineinfile:
+    - name: Configure ~/.zshrc to add Go to PATH
+      ansible.builtin.blockinfile:
         path: "{{ ansible_facts['env']['HOME'] }}/.zshrc"
-        line: "export PATH=$PATH:/usr/local/go/bin:{{ ansible_facts['env']['HOME'] }}/go/bin"
-        regexp: "^export PATH=$PATH:/usr/local/go/bin:{{ ansible_facts['env']['HOME'] }}/go/bin$"
-        state: present
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - Go PATH"
+        append_newline: true
+        prepend_newline: true
+        block: |
+          export PATH=$PATH:/usr/local/go/bin:{{ ansible_facts['env']['HOME'] }}/go/bin

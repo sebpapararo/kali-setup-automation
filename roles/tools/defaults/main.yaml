@@ -1,0 +1,137 @@
+---
+# Package and repository lists for the tools role. Task files hold the logic;
+# what gets installed lives here.
+
+# Installed from Kali's own repositories plus the third-party repositories
+# registered at the top of apt.yaml.
+tools_apt_packages:
+  - awscli
+  - bettercap
+  - bloodhound
+  - bruno
+  - clangd
+  - cmake
+  - cupp
+  - cyberchef
+  - enum4linux-ng
+  - feroxbuster
+  - flameshot
+  - gdb
+  - gdbserver
+  - ghidra
+  - gitleaks
+  - goshs
+  - gowitness
+  - ipcalc
+  - ipmitool
+  - jadx
+  - jq
+  - kubectl
+  - libreadline-dev
+  - lldb
+  - ltrace
+  - lynis
+  - mdns-scan
+  - mongodb-clients
+  - name-that-hash
+  - nbtscan-unixwiz
+  - ntpsec
+  - nuclei
+  - odat
+  - openjdk-21-jdk
+  - seclists
+  - sippts
+  - snmp-mibs-downloader
+  - sstimap
+  - strace
+  - tokei
+  - trivy
+  - wpprobe
+  - xrdp
+  - xsstrike
+
+# Kali ships these, but we install better versions elsewhere in the role:
+# burpsuite via burpsuite.yaml, evil-winrm via the gem in gem.yaml.
+tools_apt_packages_absent:
+  - burpsuite
+  - evil-winrm
+
+tools_pip_packages:
+  - pwntools
+  - angr
+
+tools_pipx_packages:
+  - bandit
+  - bloodyAD
+  - clairvoyance
+  - defaultcreds-cheat-sheet
+  - git-dumper
+  - git+https://github.com/Pennyw0rth/NetExec
+  - penelope-shell-handler
+  - smbclientng
+  - ssh-audit
+  - updog
+  - wesng
+
+# Extra packages injected into an already-installed pipx virtual environment.
+tools_pipx_injections:
+  - { name: 'wesng', inject: 'chardet' }
+
+tools_gem_packages:
+  - evil-winrm
+  - readline-ext
+
+tools_cargo_crates:
+  - legba
+  - rusthound-ce
+  - rustscan
+  - starship
+  - zellij
+
+tools_vscode_extensions:
+  - beardedbear.beardedtheme
+  - pkief.material-icon-theme
+  - k--kato.intellij-idea-keybindings
+  - eamodio.gitlens
+  - ms-vscode-remote.remote-ssh
+
+# Cloned into ~/Documents/<type>s/<name> by repos.yaml.
+tools_git_repos:
+  - { name: "PayloadsAllTheThings", repo: "https://github.com/swisskyrepo/PayloadsAllTheThings.git", branch: "master", type: "cheatsheet"}
+  - { name: "InternalAllTheThings", repo: "https://github.com/swisskyrepo/InternalAllTheThings.git", branch: "main", type: "cheatsheet"}
+  - { name: "HackTricks", repo: "https://github.com/HackTricks-wiki/hacktricks.git", branch: "master", type: "cheatsheet"}
+  - { name: "reverse-shell-generator", repo: "https://github.com/0dayCTF/reverse-shell-generator.git", branch: "main", type: "cheatsheet"}
+  - { name: "GTFObins", repo: "https://github.com/GTFOBins/GTFOBins.github.io.git", branch: "master", type: "cheatsheet"}
+  - { name: "LOLBAS", repo: "https://github.com/LOLBAS-Project/LOLBAS.git", branch: "master", type: "cheatsheet"}
+  - { name: "personal-pentesting-notes", repo: "https://github.com/sebpapararo/pentesting-notes.git", branch: "main", type: "cheatsheet"}
+  - { name: "endoflife.date", repo: "https://github.com/endoflife-date/endoflife.date.git", branch: "master", type: "cheatsheet"}
+  - { name: "testssl.sh", repo: "https://github.com/testssl/testssl.sh.git", branch: "3.3dev", type: "tool"}
+  - { name: "mongobleed", repo: "https://github.com/joe-desimone/mongobleed.git", branch: "main", type: "exploit"}
+  - { name: "PowerSharpPack", repo: "https://github.com/S3cur3Th1sSh1t/PowerSharpPack.git", branch: "master", type: "tool"}
+  - { name: "WADComs", repo: "https://github.com/WADComs/WADComs.github.io.git", branch: "master", type: "cheatsheet"}
+  - { name: "PRET", repo: "https://github.com/RUB-NDS/PRET.git", branch: "master", type: "tool"}
+  - { name: "adPEAS", repo: "https://github.com/61106960/adPEAS.git", branch: "main", type: "tool"}
+
+# Tools installed by running an upstream installer script; consumed by bash.yaml.
+# See _install_script.yaml for the schema. rustup, uv and nvm use the same
+# mechanism but are declared next to the surrounding logic in their own task files.
+tools_install_scripts:
+  - name: opengrep
+    url: https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh
+    creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/opengrep"
+  - name: pwndbg
+    url: https://install.pwndbg.re
+    creates: /usr/local/bin/pwndbg
+    become: true
+    args:
+      - -t pwndbg-gdb
+      - -t pwndbg-lldb
+  - name: pwnellij
+    url: https://raw.githubusercontent.com/sebpapararo/pwnellij/master/scripts/install.sh
+    creates: "{{ ansible_facts['env']['HOME'] }}/.local/bin/pwnellij"
+  - name: trufflehog
+    url: https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh
+    creates: /usr/local/bin/trufflehog
+    become: true
+    args:
+      - -b /usr/local/bin

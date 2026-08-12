@@ -1,110 +1,13 @@
 ---
-- name: Install Opengrep
-  block:
-    - name: Check if Opengrep is already installed
-      ansible.builtin.stat:
-        path: "{{ ansible_facts['env']['HOME'] }}/.local/bin/opengrep"
-      register: tools_opengrep_installed
+- name: Install tools from upstream installer scripts
+  ansible.builtin.include_tasks: _install_script.yaml
+  loop: "{{ tools_install_scripts }}"
+  loop_control:
+    loop_var: tools_install_script
+    label: "{{ tools_install_script.name }}"
 
-    - name: Download Opengrep installer
-      ansible.builtin.get_url:
-        url: https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh
-        dest: /tmp/opengrep-init.sh
-        mode: '0755'
-      when: not tools_opengrep_installed.stat.exists
-
-    - name: Run Opengrep installer
-      ansible.builtin.command: /tmp/opengrep-init.sh
-      when: not tools_opengrep_installed.stat.exists
-      changed_when: true
-
-    - name: Clean up Opengrep installer
-      ansible.builtin.file:
-        path: /tmp/opengrep-init.sh
-        state: absent
-
-- name: Install pwndbg for GDB & LLDB
-  block:
-    - name: Check if pwndbg is already installed
-      ansible.builtin.stat:
-        path: "/usr/local/bin/pwndbg"
-      register: tools_pwndbg_installed
-
-    - name: Download pwndbg installer
-      ansible.builtin.get_url:
-        url: https://install.pwndbg.re
-        dest: /tmp/pwndbg-init.sh
-        mode: '0755'
-      when: not tools_pwndbg_installed.stat.exists
-
-    - name: Run pwndbg-gdb installer
-      ansible.builtin.command: /tmp/pwndbg-init.sh -t pwndbg-gdb
-      when: not tools_pwndbg_installed.stat.exists
-      changed_when: true
-      become: true
-
-    - name: Run pwndbg-lldb installer
-      ansible.builtin.command: /tmp/pwndbg-init.sh -t pwndbg-lldb
-      when: not tools_pwndbg_installed.stat.exists
-      changed_when: true
-      become: true
-
-    - name: Clean up pwndbg installer
-      ansible.builtin.file:
-        path: /tmp/pwndbg-init.sh
-        state: absent
-
-    - name: Copy the gdbinit file
-      ansible.builtin.copy:
-        src: gdbinit
-        dest: "{{ ansible_facts['env']['HOME'] }}/.gdbinit"
-        mode: '0664'
-
-- name: Install pwnellij for pwndbg
-  block:
-    - name: Check if pwnellij is already installed
-      ansible.builtin.stat:
-        path: "{{ ansible_facts['env']['HOME'] }}/.local/bin/pwnellij"
-      register: tools_pwnellij_installed
-
-    - name: Download pwnellij installer
-      ansible.builtin.get_url:
-        url: https://raw.githubusercontent.com/sebpapararo/pwnellij/master/scripts/install.sh
-        dest: /tmp/pwnellij-init.sh
-        mode: '0755'
-      when: not tools_pwnellij_installed.stat.exists
-
-    - name: Run pwnellij installer
-      ansible.builtin.command: /tmp/pwnellij-init.sh
-      when: not tools_pwnellij_installed.stat.exists
-      changed_when: true
-
-    - name: Clean up pwnellij installer
-      ansible.builtin.file:
-        path: /tmp/pwnellij-init.sh
-        state: absent
-
-- name: Install Trufflehog
-  block:
-    - name: Check if Trufflehog is already installed
-      ansible.builtin.stat:
-        path: "/usr/local/bin/trufflehog"
-      register: tools_trufflehog_installed
-
-    - name: Download Trufflehog installer
-      ansible.builtin.get_url:
-        url: https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh
-        dest: /tmp/trufflehog-init.sh
-        mode: '0755'
-      when: not tools_trufflehog_installed.stat.exists
-
-    - name: Run Trufflehog installer
-      ansible.builtin.command: /tmp/trufflehog-init.sh -b /usr/local/bin
-      when: not tools_trufflehog_installed.stat.exists
-      changed_when: true
-      become: true
-
-    - name: Clean up Trufflehog installer
-      ansible.builtin.file:
-        path: /tmp/trufflehog-init.sh
-        state: absent
+- name: Copy the gdbinit file
+  ansible.builtin.copy:
+    src: gdbinit
+    dest: "{{ ansible_facts['env']['HOME'] }}/.gdbinit"
+    mode: '0664'

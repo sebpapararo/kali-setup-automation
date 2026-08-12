@@ -22,3 +22,7 @@
 - name: Enable shared folders
   ansible.builtin.import_tasks: shared_folder.yaml
   tags: shared_folder
+
+- name: Configure Git defaults
+  ansible.builtin.import_tasks: git.yaml
+  tags: git

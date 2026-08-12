@@ -4,9 +4,7 @@
   ansible.builtin.apt:
     state: present
     update_cache: true
-    pkg:
-      - apt-transport-https
-      - python3-debian
+    pkg: "{{ system_apt_packages }}"
 
 - name: Convert Kali APT sources to modern 'deb822' format
   become: true

@@ -1,0 +1,6 @@
+---
+terminal_apt_packages:
+  - bat
+  - fd-find
+  - ripgrep
+  - fzf

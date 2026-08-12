@@ -4,15 +4,14 @@
   ansible.builtin.apt:
     state: present
     update_cache: true
-    pkg:
-      - kali-wallpapers-2024
+    pkg: "{{ desktop_apt_packages }}"
 
 - name: Set desktop background image
   community.general.xfconf:
     channel: xfce4-desktop
     property: /backdrop/screen0/monitorVirtual-1/workspace0/last-image
     value_type: string
-    value: /usr/share/backgrounds/kali/kali-metal-dark-16x9.png
+    value: "{{ desktop_wallpaper }}"
 
 - name: Get current panel plugin IDs
   ansible.builtin.command:
@@ -50,13 +49,5 @@
   loop: "{{ desktop_plugins_to_remove }}"
 
 - name: Add launchers to XFCE taskbar
-  ansible.builtin.include_tasks: add_taskbar_launcher.yaml
-  loop:
-    - { position: 3, desktop_file: "/usr/share/applications/google-chrome.desktop"}
-    - { position: 4, desktop_file: "/usr/share/applications/kali-ghidra.desktop"}
-    - { position: 5, desktop_file: "/usr/share/applications/binaryninja.desktop"}
-    - { position: 6, desktop_file: "/usr/share/applications/org.wireshark.Wireshark.desktop"}
-    - { position: 7, desktop_file: "/usr/share/applications/bruno.desktop"}
-    - { position: 8, desktop_file: "/usr/share/applications/burpsuite-pro.desktop"}
-    - { position: 9, desktop_file: "/usr/share/applications/code.desktop"}
-    - { position: 10, desktop_file: "/usr/share/applications/obsidian.desktop"}
+  ansible.builtin.include_tasks: _add_taskbar_launcher.yaml
+  loop: "{{ desktop_taskbar_launchers }}"

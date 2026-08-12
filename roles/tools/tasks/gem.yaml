@@ -5,6 +5,4 @@
     name: "{{ item }}"
     state: present
     user_install: false
-  loop:
-    - evil-winrm
-    - readline-ext
+  loop: "{{ tools_gem_packages }}"

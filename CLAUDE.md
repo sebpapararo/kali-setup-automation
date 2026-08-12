@@ -23,7 +23,7 @@ ansible-playbook site.yaml --limit kali-target -t tools
 ansible-lint
 ```
 
-`ansible.cfg` sets `ask_pass=True` and `become_ask_pass=True`, so every run prompts for SSH and sudo passwords. Output is appended to `ansible.log` (gitignored).
+`ansible.cfg` sets `become_ask_pass = True`, so every run prompts for the sudo password. SSH passwords are not prompted for by default — the usual target is `localhost` over the `local` connection, where there is no SSH login; remote runs pass `-k`. Output is appended to `ansible.log` (gitignored).
 
 ## Architecture
 
@@ -33,15 +33,16 @@ Each role follows the same shape:
 
 - `roles/<role>/tasks/main.yaml` is a dispatcher: it `import_tasks`-includes one sub-task file per logical chunk, and each import is tagged. For example, `roles/tools/tasks/main.yaml` imports `apt.yaml`, `rust.yaml`, `python.yaml`, … each with its own tag (`apt`, `rust`, `python`, …). This is what lets `-t rust,python` work without running the rest of the role.
 - `roles/<role>/files/` holds static assets copied to the target (configs, scripts, the bundled Obsidian vault, etc.). `roles/<role>/templates/` holds Jinja-rendered files (e.g. `binaryninja.desktop`).
-- There are no `defaults/` or `vars/` directories — facts are computed inline with `set_fact` when needed (e.g. fetching the latest Obsidian release tag from GitHub before installing).
+- `roles/<role>/defaults/main.yaml` holds the *what*: package lists, the repo clone list, the taskbar launcher list, regional settings. Task files hold the *how*. When adding a tool to an existing list, edit `defaults/`, not the task. Values only knowable at runtime (a latest release tag, a panel's current plugin IDs) are still computed inline with `set_fact` in the task file that uses them. There are no `vars/` directories.
 
 Conventions to preserve when editing:
 
 - **Variable namespacing**: registered vars and facts are prefixed with the role name (`tools_obsidian_version`, `desktop_panel_plugin_ids`, `tools_rockyou_gz`). Keep this pattern when adding new vars so cross-role collisions stay impossible.
 - **Per-task `become`**: `become: true` is set on individual tasks that need root, not on the role or play. Don't blanket-elevate.
 - **Home directory references**: use `{{ ansible_facts['env']['HOME'] }}` (not `~` or `lookup('env', 'HOME')`) — this is what every existing task uses and it resolves correctly under `become`.
-- **APT third-party repos**: the pattern in `roles/tools/tasks/apt.yaml` is `get_url` the ASCII key → `gpg --dearmor` it into `/usr/share/keyrings/` or `/etc/apt/keyrings/` → register the repo with `ansible.builtin.deb822_repository`. Follow this when adding new third-party APT sources rather than using `apt_key` (deprecated) or inline `apt-key add`.
-- **Idempotent shell-outs**: when a task can't be expressed with a module (e.g. `gpg --dearmor`, running an installer script), guard it with `creates:` or a preceding `stat` + `when:` so re-runs are no-ops. See the `uv` install block in `roles/tools/tasks/python.yaml` for the stat-then-when pattern.
+- **APT third-party repos**: `get_url` the armoured (`.asc`) key straight into `/etc/apt/keyrings/` → register the repo with `ansible.builtin.deb822_repository`, pointing `signed_by` at that `.asc` path. `deb822_repository` accepts armoured keys, so there is no `gpg --dearmor` step. See `roles/tools/tasks/vscode.yaml` or `apt.yaml`. Don't use `apt_key` (deprecated) or inline `apt-key add`.
+- **Idempotent shell-outs**: when a task can't be expressed with a module, guard it with `creates:` or a preceding `stat` + `when:` so re-runs are no-ops.
+- **Upstream installer scripts**: don't hand-roll the download → run → delete sequence. `roles/tools/tasks/_install_script.yaml` implements it (including the stat guard and cleanup); include it and pass a `tools_install_script` dict — see the schema comment at the top of that file. Tools with no surrounding logic go in the `tools_install_scripts` list in `roles/tools/defaults/main.yaml`; ones that need neighbouring tasks pass the dict via `vars:` on the include (`rust.yaml`, `python.yaml`, `node.yaml`).
 - **`.zshrc` edits** use `blockinfile` with a unique `marker` per block (`# {mark} ANSIBLE MANAGED BLOCK - <name>`) so each managed block can be updated/removed independently.
 
 ## Tags

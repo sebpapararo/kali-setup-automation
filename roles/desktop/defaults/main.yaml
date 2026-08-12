@@ -1,0 +1,15 @@
+---
+desktop_apt_packages:
+  - kali-wallpapers-2024
+
+desktop_wallpaper: /usr/share/backgrounds/kali/kali-metal-dark-16x9.png
+
+# Launchers added to the XFCE panel, in panel position order.
+desktop_taskbar_launchers:
+  - { position: 3, desktop_file: "/usr/share/applications/google-chrome.desktop"}
+  - { position: 4, desktop_file: "/usr/share/applications/kali-ghidra.desktop"}
+  - { position: 5, desktop_file: "/usr/share/applications/org.wireshark.Wireshark.desktop"}
+  - { position: 6, desktop_file: "/usr/share/applications/bruno.desktop"}
+  - { position: 7, desktop_file: "/usr/share/applications/burpsuite-pro.desktop"}
+  - { position: 8, desktop_file: "/usr/share/applications/code.desktop"}
+  - { position: 9, desktop_file: "/usr/share/applications/obsidian.desktop"}

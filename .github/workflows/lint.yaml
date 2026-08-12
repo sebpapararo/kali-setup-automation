@@ -23,3 +23,6 @@ jobs:
 
       - name: Run ansible-lint
         run: ansible-lint
+
+      - name: Check playbook syntax
+        run: ansible-playbook site.yaml --syntax-check
