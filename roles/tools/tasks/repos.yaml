@@ -1,0 +1,21 @@
+---
+- name: Create the repo directories
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/Documents/{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "cheatsheets"
+    - "exploits"
+    - "tools"
+
+- name: Clone useful repos
+  ansible.builtin.git:
+    repo: "{{ item.repo }}"
+    dest: "{{ ansible_facts['env']['HOME'] }}/Documents/{{ item.type }}s/{{ item.name }}"
+    single_branch: true
+    depth: 1
+    version: "{{ item.branch }}"
+  retries: 3
+  delay: 3
+  loop: "{{ tools_git_repos }}"

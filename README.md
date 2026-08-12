@@ -36,18 +36,20 @@ remote:
       ansible_user: kali
 ```
 
-Then run the playbook targeting that group or host. You will be prompted for the SSH password and sudo password:
+Then run the playbook targeting that group or host. Pass `-k` to be prompted for the SSH password; the sudo password is always prompted for:
 
 ```bash
 # Run against all remote hosts
-ansible-playbook site.yaml --limit remote
+ansible-playbook site.yaml --limit remote -k
 
 # Run against a specific host
-ansible-playbook site.yaml --limit kali-target
+ansible-playbook site.yaml --limit kali-target -k
 
 # Run specific tags against a remote host
-ansible-playbook site.yaml --limit kali-target -t tools
+ansible-playbook site.yaml --limit kali-target -k -t tools
 ```
+
+Drop `-k` if the host trusts your SSH key.
 
 ## Available Tags
 
@@ -69,6 +71,7 @@ Use these to run specific system configuration tasks:
 |-----|-------------|
 | `autologin` | Enable autologin for current user |
 | `cleanup` | Remove unused home directories (Music, Pictures, etc.) |
+| `git` | Global Git defaults (default branch, push/pull behaviour, editor) |
 | `regional` | Regional settings (locale, keyboard, timezone) |
 | `shared_folder` | Enable VMware shared folders via `/etc/fstab` (vmhgfs-fuse) |
 | `upgrade` | APT sources modernization and full package upgrade |
@@ -89,12 +92,13 @@ Use these to install specific tools without running the full `tools` role:
 | `docker` | Docker CE, compose plugin, buildx plugin |
 | `gem` | Ruby gems (evil-winrm, readline-ext) |
 | `ghidra` | Apply custom Ghidra theme (Flat Dark Theme (Mine)) and CodeBrowser tool configuration |
-| `git` | Global Git defaults, checksec/dive `.deb` installs, and clone pentest cheatsheet/tool/exploit repos plus standalone downloads (pspy, PrivescCheck, les.sh, ligolo-ng, RustScan) into `~/Documents/` |
 | `golang` | Go programming language |
 | `nessus` | Download and install Tenable Nessus |
 | `node` | Node.js LTS via NVM |
 | `obsidian` | Install Obsidian and extract base vault to `~/Documents/Obsidian Job Notes/` |
 | `python` | Python tools (pwntools, angr, netexec, bandit, uv) |
+| `releases` | Tools installed from GitHub releases (checksec, dive, pspy, PrivescCheck, les.sh, ligolo-ng, RustScan) into `~/Documents/tools/` |
+| `repos` | Clone pentest cheatsheet/tool/exploit repos into `~/Documents/` |
 | `rust` | Rust toolchain, Starship prompt, Zellij terminal multiplexer |
 | `vscode` | VS Code with extensions (BeardedTheme, Material Icons, IntelliJ keybindings, GitLens, Remote - SSH) |
 | `windows` | Download and extract Sysinternals Suite to `~/Documents/tools/Sysinternals/` |

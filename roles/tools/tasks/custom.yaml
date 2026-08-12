@@ -5,14 +5,10 @@
     state: directory
     mode: "0755"
 
-- name: Copy nmap_to_md.py
+- name: Copy custom tooling scripts
   ansible.builtin.copy:
-    src: custom_tooling/nmap_to_md.py
-    dest: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/custom/nmap_to_md.py"
+    src: "{{ item }}"
+    dest: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/custom/{{ item | basename }}"
     mode: "0755"
-
-- name: Copy ssh_audit_parser.py
-  ansible.builtin.copy:
-    src: custom_tooling/ssh_audit_parser.py
-    dest: "{{ ansible_facts['env']['HOME'] }}/Documents/tools/custom/ssh_audit_parser.py"
-    mode: "0755"
+  with_fileglob:
+    - custom_tooling/*

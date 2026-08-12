@@ -51,9 +51,13 @@
   ansible.builtin.import_tasks: ghidra.yaml
   tags: ghidra
 
-- name: Configure Git and install tools
-  ansible.builtin.import_tasks: git.yaml
-  tags: git
+- name: Clone useful repos
+  ansible.builtin.import_tasks: repos.yaml
+  tags: repos
+
+- name: Install tools from GitHub releases
+  ansible.builtin.import_tasks: releases.yaml
+  tags: releases
 
 - name: Install Nessus
   ansible.builtin.import_tasks: nessus.yaml

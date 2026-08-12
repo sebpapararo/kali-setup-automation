@@ -1,0 +1,12 @@
+---
+# Regional settings applied by regional.yaml.
+system_locale: en_GB.UTF-8
+system_language: en_GB:en
+system_keyboard_layout: gb
+system_keyboard_model: pc105
+system_timezone: Europe/London
+
+# Needed before any third-party deb822 repository can be registered.
+system_apt_packages:
+  - apt-transport-https
+  - python3-debian

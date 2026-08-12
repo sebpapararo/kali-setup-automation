@@ -1,0 +1,43 @@
+---
+# Shared implementation of the "download an upstream installer script, run it,
+# delete it" pattern. Include it with include_tasks and set tools_install_script:
+#
+#   name:    tool name; also used for the temporary filename    (required)
+#   url:     installer script URL                               (required)
+#   creates: path that exists once the tool is installed        (required)
+#   args:    list of argument strings, one installer run each   (default: one run, no args)
+#   become:  run the installer as root                          (default: false)
+#   env:     environment variables for the installer            (default: none)
+#
+# Callers with several tools loop over a list from defaults/main.yaml with
+# loop_var: tools_install_script (see bash.yaml); single-tool callers pass one
+# dict via vars: (see rust.yaml, python.yaml, node.yaml).
+
+- name: Check for an existing install of {{ tools_install_script.name }}
+  ansible.builtin.stat:
+    path: "{{ tools_install_script.creates }}"
+  register: tools_install_script_installed
+
+- name: Install {{ tools_install_script.name }}
+  when: not tools_install_script_installed.stat.exists
+  block:
+    - name: Download the installer for {{ tools_install_script.name }}
+      ansible.builtin.get_url:
+        url: "{{ tools_install_script.url }}"
+        dest: "/tmp/{{ tools_install_script.name }}-init.sh"
+        mode: '0755'
+
+    - name: Run the installer for {{ tools_install_script.name }}
+      ansible.builtin.command:
+        cmd: "/tmp/{{ tools_install_script.name }}-init.sh {{ item }}"
+      become: "{{ tools_install_script.become | default(false) }}"
+      environment: "{{ tools_install_script.env | default({}) }}"
+      loop: "{{ tools_install_script.args | default(['']) }}"
+      changed_when: true
+
+# Outside the block so a script left behind by an interrupted run is still
+# cleaned up on the next pass.
+- name: Clean up the installer for {{ tools_install_script.name }}
+  ansible.builtin.file:
+    path: "/tmp/{{ tools_install_script.name }}-init.sh"
+    state: absent

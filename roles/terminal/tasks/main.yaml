@@ -4,11 +4,7 @@
   ansible.builtin.apt:
     state: present
     update_cache: true
-    pkg:
-      - bat
-      - fd-find
-      - ripgrep
-      - fzf
+    pkg: "{{ terminal_apt_packages }}"
 
 - name: Set qterminal transparency to 0
   community.general.ini_file:

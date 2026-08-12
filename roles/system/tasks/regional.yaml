@@ -1,16 +1,16 @@
 ---
-- name: Set default locale to en_GB.UTF-8
+- name: Set default locale to {{ system_locale }}
   become: true
   ansible.builtin.debconf:
     name: locales
     question: locales/default_environment_locale
-    value: en_GB.UTF-8
+    value: "{{ system_locale }}"
     vtype: select
 
-- name: Enable and generate en_GB.UTF-8 locale
+- name: Enable and generate the locale {{ system_locale }}
   become: true
   community.general.locale_gen:
-    name: en_GB.UTF-8
+    name: "{{ system_locale }}"
     state: present
 
 - name: Set system locale
@@ -18,25 +18,25 @@
   ansible.builtin.copy:
     dest: /etc/default/locale
     content: |
-      LANG=en_GB.UTF-8
-      LANGUAGE=en_GB:en
-      LC_ALL=en_GB.UTF-8
+      LANG={{ system_locale }}
+      LANGUAGE={{ system_language }}
+      LC_ALL={{ system_locale }}
     mode: '0644'
 
-- name: Set keyboard layout to UK
+- name: Set keyboard layout to {{ system_keyboard_layout }}
   become: true
   ansible.builtin.debconf:
     name: keyboard-configuration
     question: keyboard-configuration/layoutcode
-    value: gb
+    value: "{{ system_keyboard_layout }}"
     vtype: string
 
-- name: Set keyboard model
+- name: Set keyboard model to {{ system_keyboard_model }}
   become: true
   ansible.builtin.debconf:
     name: keyboard-configuration
     question: keyboard-configuration/modelcode
-    value: pc105
+    value: "{{ system_keyboard_model }}"
     vtype: string
 
 - name: Configure keyboard defaults
@@ -44,8 +44,8 @@
   ansible.builtin.copy:
     dest: /etc/default/keyboard
     content: |
-      XKBMODEL="pc105"
-      XKBLAYOUT="gb"
+      XKBMODEL="{{ system_keyboard_model }}"
+      XKBLAYOUT="{{ system_keyboard_layout }}"
       XKBVARIANT=""
       XKBOPTIONS=""
       BACKSPACE="guess"
@@ -59,7 +59,7 @@
   when: system_keyboard_config.changed
   changed_when: true
 
-- name: Set timezone to Europe/London
+- name: Set timezone to {{ system_timezone }}
   become: true
   community.general.timezone:
-    name: Europe/London
+    name: "{{ system_timezone }}"
