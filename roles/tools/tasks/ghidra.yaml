@@ -12,14 +12,23 @@
         src: /usr/share/ghidra/Ghidra/application.properties
       register: tools_ghidra_appprops
 
-    - name: Determine Ghidra version and user settings directory
+    - name: Determine Ghidra version and release name
       ansible.builtin.set_fact:
+        # The settings directory is named after ApplicationIdentifier.toString(),
+        # which is "<name>_<version>_<release name>" e.g. ghidra_12.0_PUBLIC.
         tools_ghidra_version: "{{ tools_ghidra_appprops.content | b64decode | regex_search('application.version=([0-9.]+)', '\\1') | first }}"
+        tools_ghidra_release: >-
+          {{ tools_ghidra_appprops.content | b64decode
+             | regex_search('application.release.name=(\S+)', '\1')
+             | default(['PUBLIC'], true) | first }}
 
     - name: Set Ghidra settings directory fact
       ansible.builtin.set_fact:
-        # Ghidra 12.x stores user settings under $HOME/.config/<app>/<app>_<version>
-        tools_ghidra_settings_dir: "{{ ansible_facts['env']['HOME'] }}/.config/ghidra/ghidra_{{ tools_ghidra_version }}"
+        # Ghidra 11.1+ stores user settings under $XDG_CONFIG_HOME (default $HOME/.config)
+        tools_ghidra_settings_dir: >-
+          {{ ansible_facts['env']['XDG_CONFIG_HOME']
+             | default(ansible_facts['env']['HOME'] ~ '/.config', true)
+          }}/ghidra/ghidra_{{ tools_ghidra_version }}_{{ tools_ghidra_release }}
 
     - name: Create Ghidra themes and tools directories
       ansible.builtin.file:
@@ -37,16 +46,23 @@
         mode: "0644"
 
     - name: Select the Flat Dark Theme (Mine) as the active theme
+      # ThemePreferences only understands "File:<absolute path>" or "Class:<class name>"
+      # theme IDs; a bare theme name silently falls back to the default theme.
       ansible.builtin.lineinfile:
         path: "{{ tools_ghidra_settings_dir }}/preferences"
         regexp: '^Theme='
-        line: "Theme=Flat Dark Theme (Mine)"
+        line: "Theme=File:{{ tools_ghidra_settings_dir }}/themes/Flat_Dark_Theme_(Mine).theme"
         create: true
         mode: "0644"
 
     - name: Deploy the exported CodeBrowser tool configuration
-      # Named CodeBrowser.tool so it overrides the default tool used when opening a program
+      # The tool chest only loads *.tcd files (.tool is the import/export extension). The
+      # default-tool association for opening a Program is keyed to the tool chest entry
+      # Ghidra itself extracts on first run, whose filename is derived from the internal
+      # TOOL_NAME ("CodeBrowser" -> "_code_browser.tcd", underscore before each internal
+      # capital, lowercased) — not the literal tool name. A file named CodeBrowser.tcd
+      # is imported as an unrelated extra tool and never used when opening a program.
       ansible.builtin.copy:
         src: "Ghidra Tool.tool"
-        dest: "{{ tools_ghidra_settings_dir }}/tools/CodeBrowser.tool"
+        dest: "{{ tools_ghidra_settings_dir }}/tools/_code_browser.tcd"
         mode: "0644"

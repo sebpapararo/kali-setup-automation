@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.14.1] - 14-08-2026
+
+### Fixed
+
+- Ghidra settings directory now includes the release name (`ghidra_<version>_PUBLIC`) and honours `XDG_CONFIG_HOME`, so the theme and tool configuration land in the directory Ghidra actually reads
+- Ghidra theme selection now uses a `File:<path>` theme ID instead of a bare theme name, which silently fell back to the default theme
+- The exported CodeBrowser tool configuration is now deployed as `_code_browser.tcd`, the filename Ghidra associates with the default tool for opening a program (a `.tool` file was imported as an unrelated extra tool and never used)
+
 ## [1.14.0] - 02-08-2026
 
 ### Added
