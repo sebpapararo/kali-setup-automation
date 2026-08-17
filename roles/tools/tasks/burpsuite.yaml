@@ -6,22 +6,27 @@
         path: /opt/BurpSuitePro/BurpSuite
       register: tools_burpsuite_installed
 
-    - name: Get latest Burp Suite version
+    - name: Get the recent Burp Suite releases
       ansible.builtin.uri:
-        url: https://portswigger.net/burp/releases/data?pageSize=1
+        url: https://portswigger.net/burp/releases/data?pageSize=20
         return_content: true
       register: tools_burpsuite_releases
       changed_when: false
       when: not tools_burpsuite_installed.stat.exists
 
-    - name: Extract the latest version into a variable
+    - name: Extract the latest stable desktop version into a variable
       ansible.builtin.set_fact:
-        tools_burpsuite_version: "{{ tools_burpsuite_releases.json.ResultSet.Results[0].version }}"
+        tools_burpsuite_version: >-
+          {{
+            tools_burpsuite_releases.json.ResultSet.Results
+            | selectattr('buildCategory', 'equalto', 'desktop')
+            | selectattr('releaseChannels', 'contains', 'Stable')
+            | map(attribute='version')
+            | first
+          }}
       when: not tools_burpsuite_installed.stat.exists
 
     - name: Download the Burp Suite Professional installer
-      # PortSwigger ships a single desktop installer; the Professional edition is
-      # unlocked by entering a Pro licence key on first launch.
       ansible.builtin.get_url:
         url: "https://portswigger.net/burp/releases/download?product=desktop&version={{ tools_burpsuite_version }}&type=linux"
         dest: /tmp/burpsuite_pro_installer.sh

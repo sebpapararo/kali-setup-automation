@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.14.2] - 17-08-2026
+
+### Fixed
+
+- Burp Suite version detection now filters the PortSwigger release feed to stable `desktop` builds, instead of taking the newest entry overall — which had become a DAST release, so the download produced the wrong product
+- Added `pkg-config` to the base apt packages, which pwntools requires to build its dependencies
+
 ## [1.14.1] - 14-08-2026
 
 ### Fixed
