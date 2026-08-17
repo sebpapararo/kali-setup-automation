@@ -9,4 +9,5 @@ system_timezone: Europe/London
 # Needed before any third-party deb822 repository can be registered.
 system_apt_packages:
   - apt-transport-https
+  - pkg-config
   - python3-debian
