@@ -31,3 +31,10 @@
       alias find='fdfind'
       alias fd='fdfind'
       source <(fzf --zsh)
+
+- name: Copy the improved vim config
+  become: true
+  ansible.builtin.copy:
+    src: vimrc
+    dest: "/etc/vim/vimrc"
+    mode: '0644'
