@@ -1,0 +1,50 @@
+" Line numbers
+set number
+
+" Highlight current line
+set cursorline
+
+" Better searching
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+
+" Indentation
+set autoindent
+set smartindent
+set expandtab
+set tabstop=4
+set shiftwidth=4
+
+" Show whitespace characters
+set list
+set listchars=tab:>-,trail:·,extends:>,precedes:<
+
+" Keep some context visible when scrolling
+set scrolloff=5
+set sidescrolloff=5
+
+" Enable mouse support
+set mouse=a
+
+" Show matching brackets briefly
+set showmatch
+
+" Better command-line completion
+set wildmenu
+set wildmode=longest:full,full
+
+" Don't create backup/swap files everywhere
+set nobackup
+set nowritebackup
+
+" Faster redraw / responsiveness
+set lazyredraw
+set updatetime=300
+
+" Enable syntax highlighting
+syntax on
+
+" Enable filetype-specific settings
+filetype plugin indent on
