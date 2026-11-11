@@ -25,14 +25,14 @@
 
 - name: Calculate plugin IDs to remove
   ansible.builtin.set_fact:
-    desktop_plugins_to_remove: "{{ desktop_panel_plugin_ids[2:5] + desktop_panel_plugin_ids[7:9] }}"
+    desktop_plugins_to_remove: "{{ desktop_panel_plugin_ids[2:5] + desktop_panel_plugin_ids[8:10] }}"
 
 - name: Remove unnecessary items from taskbar
   community.general.xfconf:
     channel: xfce4-panel
     property: /panels/panel-1/plugin-ids
     value_type: int
-    value: "{{ desktop_panel_plugin_ids[:2] + desktop_panel_plugin_ids[5:7] + desktop_panel_plugin_ids[9:] }}"
+    value: "{{ desktop_panel_plugin_ids[:2] + desktop_panel_plugin_ids[5:6] + desktop_panel_plugin_ids[7:8] + desktop_panel_plugin_ids[10:] }}"
     force_array: true
 
 - name: Remove plugin configurations from xfconf

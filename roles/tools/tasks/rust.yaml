@@ -53,6 +53,13 @@
         pkg:
           - xsel
 
+    - name: Install the zellij desktop entry
+      ansible.builtin.command:
+        cmd: zellij setup --install-desktop-entry
+        creates: "{{ ansible_facts['env']['HOME'] }}/.local/share/applications/dev.zellij.Zellij.desktop"
+      environment:
+        PATH: "{{ ansible_facts['env']['HOME'] }}/.cargo/bin:{{ ansible_facts['env']['PATH'] }}"
+
     - name: Copy the customised Zellij config
       ansible.builtin.copy:
         src: zellij_config.kdl

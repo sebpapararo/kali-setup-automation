@@ -60,7 +60,7 @@ Drop `-k` if the host trusts your SSH key.
 | `desktop` | Desktop environment configuration |
 | `ssh` | Generate ed25519 SSH keypair |
 | `system` | System configuration (includes all system sub-tags below) |
-| `terminal` | Terminal enhancements (bat, fd-find, ripgrep, fzf, shell aliases) |
+| `terminal` | Terminal enhancements (bat, fd-find, ripgrep, fzf, FiraCode Nerd Font, shell aliases) |
 | `tools` | Install all development tools (includes all tool sub-tags below) |
 
 ### System Sub-Tags
