@@ -6,6 +6,26 @@
     update_cache: true
     pkg: "{{ terminal_apt_packages }}"
 
+- name: Create the FiraCode Nerd Font directory
+  ansible.builtin.file:
+    path: "{{ ansible_facts['env']['HOME'] }}/.local/share/fonts/FiraCodeNerdFont"
+    state: directory
+    mode: "0755"
+
+- name: Download and extract the FiraCode Nerd Font
+  ansible.builtin.unarchive:
+    src: https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.tar.xz
+    dest: "{{ ansible_facts['env']['HOME'] }}/.local/share/fonts/FiraCodeNerdFont"
+    remote_src: true
+    creates: "{{ ansible_facts['env']['HOME'] }}/.local/share/fonts/FiraCodeNerdFont/FiraCodeNerdFont-Regular.ttf"
+  register: terminal_firacode_font
+
+- name: Rebuild the font cache
+  ansible.builtin.command:
+    cmd: fc-cache -f
+  when: terminal_firacode_font.changed
+  changed_when: true
+
 - name: Set qterminal transparency to 0
   community.general.ini_file:
     path: "{{ ansible_facts['env']['HOME'] }}/.config/qterminal.org/qterminal.ini"

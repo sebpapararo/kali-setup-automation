@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.16.0] - 11-11-2026
+
+### Added
+
+- Install the FiraCode Nerd Font from the latest `ryanoasis/nerd-fonts` release into `~/.local/share/fonts` as part of the `terminal` role
+- Install the Zellij desktop entry (`dev.zellij.Zellij.desktop`) and add Zellij to the desktop taskbar launchers
+- Added `openjdk-25-jdk` to the apt packages
+
+### Changed
+
+- `legba` and `rustscan` are now installed via apt instead of being built with Cargo
+- Zellij now uses the `catppuccin-mocha` theme and the Fira Code font for its terminal
+- The VS Code taskbar launcher now points at `com.microsoft.VSCode.desktop`
+- Updated the taskbar plugin slices to keep the extra launcher and remove the right default panel items
+
 ## [1.15.0] - 01-09-2026
 
 ### Added

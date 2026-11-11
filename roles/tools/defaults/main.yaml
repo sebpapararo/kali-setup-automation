@@ -27,6 +27,7 @@ tools_apt_packages:
   - jadx
   - jq
   - kubectl
+  - legba
   - libreadline-dev
   - lldb
   - ltrace
@@ -39,6 +40,8 @@ tools_apt_packages:
   - nuclei
   - odat
   - openjdk-21-jdk
+  - openjdk-25-jdk
+  - rustscan
   - seclists
   - sippts
   - snmp-mibs-downloader
@@ -82,9 +85,7 @@ tools_gem_packages:
   - readline-ext
 
 tools_cargo_crates:
-  - legba
   - rusthound-ce
-  - rustscan
   - starship
   - zellij
 
